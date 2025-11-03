@@ -1,17 +1,37 @@
-import { Outlet } from 'react-router-dom'
-import Navbar from './components/Layouts/Navbar' // optional if you have it
-import Footer from './components/Layouts/Footer' // optional too
+import { useState } from "react";
+import { Outlet } from "react-router-dom";
+import Navbar from "./components/Layouts/Navbar";
+import Footer from "./components/Layouts/Footer";
+import AuthModal from "./components/Layouts/AuthModal";
 
-function Layout() {
+export default function Layout() {
+  const [authOpen, setAuthOpen] = useState(false);
+  const [activeForm, setActiveForm] = useState(null);
+  const [formData, setFormData] = useState({});
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+  };
+
   return (
     <>
-      <Navbar />
-      <main>
-        <Outlet /> {/* This renders the current page */}
+      <Navbar onAuthOpen={() => setAuthOpen(true)} />
+      <main className="min-h-screen">
+        <Outlet />
       </main>
       <Footer />
-    </>
-  )
-}
 
-export default Layout
+      {/* Auth Modal */}
+      <AuthModal
+        open={authOpen}
+        setOpen={setAuthOpen}
+        activeForm={activeForm}
+        setActiveForm={setActiveForm}
+        formData={formData}
+        setFormData={setFormData}
+        handleSubmit={handleSubmit}
+      />
+    </>
+  );
+}

@@ -8,10 +8,14 @@ export default function Home() {
     document.getElementById("features")?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const scrollToWorking = () => {
+    document.getElementById("working")?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-blue-500 to-blue-400 text-white">
+      <section className="relative overflow-hidden bg-linear-to-br from-blue-600 via-blue-500 to-blue-400 text-white">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDM0djItaDJWMzB6TTYgMTR2Mmg0di00SDZ6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-20" />
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
@@ -37,10 +41,11 @@ export default function Home() {
               >
                 Get Started
               </Button>
-              <Button
+              <Button 
+                onClick={scrollToWorking}
                 size="lg"
                 variant="outline"
-                className="border-2 border-white text-white hover:bg-white/10 backdrop-blur-sm text-lg px-8 py-6"
+                className="border-2 border-white text-blue-600 hover:bg-white/10 backdrop-blur-sm text-lg px-8 py-6"
               >
                 Learn More
               </Button>
@@ -70,7 +75,7 @@ export default function Home() {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             <Card className="border-none shadow-lg hover:shadow-xl transition-all group">
               <CardContent className="p-6">
-                <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <div className="w-14 h-14 bg-linear-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <Shield className="w-7 h-7 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-3">Blockchain Security</h3>
@@ -82,7 +87,7 @@ export default function Home() {
 
             <Card className="border-none shadow-lg hover:shadow-xl transition-all group">
               <CardContent className="p-6">
-                <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <div className="w-14 h-14 bg-linear-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <Database className="w-7 h-7 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-3">IPFS Storage</h3>
@@ -94,7 +99,7 @@ export default function Home() {
 
             <Card className="border-none shadow-lg hover:shadow-xl transition-all group">
               <CardContent className="p-6">
-                <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <div className="w-14 h-14 bg-linear-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <UserCheck className="w-7 h-7 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-3">Doctor Verification</h3>
@@ -106,7 +111,7 @@ export default function Home() {
 
             <Card className="border-none shadow-lg hover:shadow-xl transition-all group">
               <CardContent className="p-6">
-                <div className="w-14 h-14 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <div className="w-14 h-14 bg-linear-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <Lock className="w-7 h-7 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-3">Access Control</h3>
@@ -120,7 +125,7 @@ export default function Home() {
       </section>
 
       {/* How It Works Section */}
-      <section className="py-20 bg-gradient-to-br from-blue-50 to-white">
+      <section id="working" className="py-20 bg-linear-to-br from-blue-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -134,7 +139,7 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-8 md:gap-12">
             <div className="text-center">
               <div className="relative mb-6">
-                <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-3xl flex items-center justify-center mx-auto shadow-xl">
+                <div className="w-20 h-20 bg-linear-to-br from-blue-500 to-blue-600 rounded-3xl flex items-center justify-center mx-auto shadow-xl">
                   <FileText className="w-10 h-10 text-white" />
                 </div>
                 <div className="absolute -top-2 -right-2 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold shadow-lg">
@@ -149,7 +154,7 @@ export default function Home() {
 
             <div className="text-center">
               <div className="relative mb-6">
-                <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-3xl flex items-center justify-center mx-auto shadow-xl">
+                <div className="w-20 h-20 bg-linear-to-br from-green-500 to-green-600 rounded-3xl flex items-center justify-center mx-auto shadow-xl">
                   <Upload className="w-10 h-10 text-white" />
                 </div>
                 <div className="absolute -top-2 -right-2 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-bold shadow-lg">
@@ -164,7 +169,7 @@ export default function Home() {
 
             <div className="text-center">
               <div className="relative mb-6">
-                <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-3xl flex items-center justify-center mx-auto shadow-xl">
+                <div className="w-20 h-20 bg-linear-to-br from-purple-500 to-purple-600 rounded-3xl flex items-center justify-center mx-auto shadow-xl">
                   <Share2 className="w-10 h-10 text-white" />
                 </div>
                 <div className="absolute -top-2 -right-2 w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold shadow-lg">
@@ -186,7 +191,7 @@ export default function Home() {
           <div className="grid md:grid-cols-4 gap-8">
             <div className="md:col-span-2">
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+                <div className="w-10 h-10 bg-linear-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
                   <Shield className="w-6 h-6 text-white" />
                 </div>
                 <span className="text-xl font-bold">MediVault</span>

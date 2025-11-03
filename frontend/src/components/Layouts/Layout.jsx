@@ -17,7 +17,7 @@ export default function Layout({ children }) {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-blue-50">
+    <div className="min-h-screen flex flex-col bg-linear-to-br from-blue-50 via-white to-blue-50">
       <Navbar onAuthOpen={() => setAuthModalOpen(true)} />
 
       <AuthModal
@@ -30,7 +30,7 @@ export default function Layout({ children }) {
         handleSubmit={handleSubmit}
       />
 
-      <main className="flex-grow min-h-[calc(100vh-4rem)]">{children}</main>
+      <main className="grow min-h-[calc(100vh-4rem)]">{children}</main>
       <Footer />
     </div>
   );

@@ -45,7 +45,7 @@ export default function DoctorDashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-white py-8">
+    <div className="min-h-screen bg-linear-to-br from-green-50 to-white py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
@@ -57,7 +57,7 @@ export default function DoctorDashboard() {
           {/* Sidebar */}
           <div className="lg:col-span-1">
             <Card className="border-none shadow-lg sticky top-8">
-              <CardHeader className="border-b bg-gradient-to-br from-green-500 to-green-600 text-white rounded-t-lg">
+              <CardHeader className="border-b bg-linear-to-br from-green-500 to-green-600 text-white rounded-t-lg">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
                     <Stethoscope className="w-6 h-6" />
@@ -133,11 +133,11 @@ export default function DoctorDashboard() {
                   </CardHeader>
                   <CardContent>
                     <div className="grid md:grid-cols-2 gap-6 mb-6">
-                      <div className="p-6 bg-gradient-to-br from-green-50 to-green-100 rounded-xl border border-green-200">
+                      <div className="p-6 bg-linear-to-br from-green-50 to-green-100 rounded-xl border border-green-200">
                         <p className="text-sm text-green-700 mb-2">Total Patients</p>
                         <p className="text-3xl font-bold text-green-900">24</p>
                       </div>
-                      <div className="p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl border border-blue-200">
+                      <div className="p-6 bg-linear-to-br from-blue-50 to-blue-100 rounded-xl border border-blue-200">
                         <p className="text-sm text-blue-700 mb-2">Records Accessed</p>
                         <p className="text-3xl font-bold text-blue-900">156</p>
                       </div>
@@ -182,7 +182,7 @@ export default function DoctorDashboard() {
                   <CardContent>
                     <div className="space-y-6">
                       {doctorInfo.verificationStatus === "verified" ? (
-                        <div className="p-6 bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-xl">
+                        <div className="p-6 bg-linear-to-br from-green-50 to-green-100 border border-green-200 rounded-xl">
                           <div className="flex items-center gap-3 mb-4">
                             <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center">
                               <CheckCircle2 className="w-7 h-7 text-white" />
@@ -198,7 +198,7 @@ export default function DoctorDashboard() {
                           </p>
                         </div>
                       ) : (
-                        <div className="p-6 bg-gradient-to-br from-yellow-50 to-yellow-100 border border-yellow-200 rounded-xl">
+                        <div className="p-6 bg-linear-to-br from-yellow-50 to-yellow-100 border border-yellow-200 rounded-xl">
                           <div className="flex items-center gap-3 mb-4">
                             <div className="w-12 h-12 bg-yellow-600 rounded-full flex items-center justify-center">
                               <Clock className="w-7 h-7 text-white" />
