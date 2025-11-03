@@ -3,15 +3,26 @@ import { Outlet } from "react-router-dom";
 import Navbar from "./components/Layouts/Navbar";
 import Footer from "./components/Layouts/Footer";
 import AuthModal from "./components/Layouts/AuthModal";
+import { registerPatient } from "./utils/registerPatient";
 
 export default function Layout() {
   const [authOpen, setAuthOpen] = useState(false);
   const [activeForm, setActiveForm] = useState(null);
   const [formData, setFormData] = useState({});
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log(formData);
+    if(activeForm === "patient"){
+      try {
+        await registerPatient(formData);
+        alert("Patient registered successfully!");
+      } catch (err) {
+        console.error(err);
+      }
+      console.log("Form submitted:", activeForm, formData);
+      console.log(formData);
+    }
+    
   };
 
   return (

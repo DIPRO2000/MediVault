@@ -1,0 +1,303 @@
+{
+	"compiler": {
+		"version": "0.8.30+commit.73712a01"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_accessControl",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_patientRegistry",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "patient",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "fileHash",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "fileType",
+						"type": "string"
+					}
+				],
+				"name": "RecordUploaded",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "viewer",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "fileHash",
+						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "time",
+						"type": "uint256"
+					}
+				],
+				"name": "RecordViewed",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "accessControl",
+				"outputs": [
+					{
+						"internalType": "contract AccessControl",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "patient",
+						"type": "address"
+					}
+				],
+				"name": "getPatientFiles",
+				"outputs": [
+					{
+						"internalType": "string[]",
+						"name": "",
+						"type": "string[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_fileHash",
+						"type": "string"
+					}
+				],
+				"name": "getRecordDetails",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "string",
+								"name": "fileHash",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "fileType",
+								"type": "string"
+							},
+							{
+								"internalType": "address",
+								"name": "owner",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "uploadTime",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct MedicalRecord.Record",
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "patientRegistry",
+				"outputs": [
+					{
+						"internalType": "contract PatientRegistry",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_fileHash",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_fileType",
+						"type": "string"
+					}
+				],
+				"name": "uploadRecord",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_fileHash",
+						"type": "string"
+					}
+				],
+				"name": "viewRecord",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "string",
+								"name": "fileHash",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "fileType",
+								"type": "string"
+							},
+							{
+								"internalType": "address",
+								"name": "owner",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "uploadTime",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct MedicalRecord.Record",
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {
+				"getPatientFiles(address)": {
+					"params": {
+						"patient": "- Patient wallet address"
+					}
+				},
+				"uploadRecord(string,string)": {
+					"params": {
+						"_fileHash": "- IPFS hash (e.g., \"Qm...\")",
+						"_fileType": "- Type of file (e.g., \"X-ray\", \"Prescription\")"
+					}
+				},
+				"viewRecord(string)": {
+					"params": {
+						"_fileHash": "- IPFS file hash (string)"
+					}
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {
+				"getPatientFiles(address)": {
+					"notice": "Get all file hashes for a given patient"
+				},
+				"getRecordDetails(string)": {
+					"notice": "Get record details by file hash"
+				},
+				"uploadRecord(string,string)": {
+					"notice": "Upload a new medical record (IPFS hash in string form)"
+				},
+				"viewRecord(string)": {
+					"notice": "View record details if access is granted or caller is owner"
+				}
+			},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/MedicalRecord.sol": "MedicalRecord"
+		},
+		"evmVersion": "paris",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/AccessControl.sol": {
+			"keccak256": "0x323287aca64c7f305a27a3a9dbc222eb0dce1031d154670b06119dc820a4364e",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://4cfbfb866b698e7ffe51e3a0653ba2a4b848ef029335f45d8ed08b1442700625",
+				"dweb:/ipfs/QmRPQxzLWu2oHoLTTtsWvrwA6hqYnM5LvcyngV93bgqHg1"
+			]
+		},
+		"contracts/MedicalRecord.sol": {
+			"keccak256": "0x23949fbb83d0afd83ec9087ab902317d3d67db49b8a64808aabb0308326f363c",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://23850f617a54bbb88cacad3376c5a1a5baee86b812eda1f962c26b444759d290",
+				"dweb:/ipfs/QmSscqs13hPzEM2KZDeKJvJD7B4pGLHUBG614k2jBWzXqj"
+			]
+		},
+		"contracts/PatientRegistry.sol": {
+			"keccak256": "0x3e7accd22a1f8d9cb69aa32d2a73dc67bfd2c0c761918f6f3c68e22f41066e25",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://0b5414346758925ec087c323357cd74b3141c7572c60a9c9aafc0e6ccccb1d8f",
+				"dweb:/ipfs/QmeavjFJ559anmTkw7iUzdsWJ975nWQqAGMYnS7ffgfyq9"
+			]
+		}
+	},
+	"version": 1
+}

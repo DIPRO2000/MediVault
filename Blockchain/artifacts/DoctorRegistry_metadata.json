@@ -164,7 +164,7 @@
 		"compilationTarget": {
 			"contracts/DoctorRegistry.sol": "DoctorRegistry"
 		},
-		"evmVersion": "prague",
+		"evmVersion": "paris",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"

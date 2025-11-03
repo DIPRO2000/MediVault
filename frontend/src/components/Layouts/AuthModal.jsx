@@ -60,52 +60,85 @@ export default function AuthModal({
 
         {/* Patient Form */}
         {activeForm === "patient" && (
-          <form onSubmit={handleSubmit} className="space-y-4 py-4">
-            {/* Switch between Register/Login */}
-            <ModeSwitch mode={mode} setMode={setMode} />
+  <form onSubmit={handleSubmit} className="space-y-4 py-4">
+    <ModeSwitch mode={mode} setMode={setMode} />
 
-            {mode === "register" ? (
-              <>
-                <InputField
-                  label="Full Name"
-                  id="name"
-                  placeholder="Enter your full name"
-                  onChange={(v) => setFormData({ ...formData, name: v })}
-                />
-                <div className="space-y-2">
-                  <Label htmlFor="gender">Gender</Label>
-                  <Select onValueChange={(value) => setFormData({ ...formData, gender: value })}>
-                    <SelectTrigger><SelectValue placeholder="Select gender" /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="male">Male</SelectItem>
-                      <SelectItem value="female">Female</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <InputField
-                  label="Date of Birth"
-                  id="dob"
-                  type="date"
-                  onChange={(v) => setFormData({ ...formData, dob: v })}
-                />
-                <InputField
-                  label="Contact Number"
-                  id="contact"
-                  type="tel"
-                  placeholder="+91 99999 99999"
-                  onChange={(v) => setFormData({ ...formData, contact: v })}
-                />
-              </>
-            ) : (
-              <p className="text-gray-600 text-sm">
-                To log in, please connect your wallet. Your account will be verified automatically.
-              </p>
-            )}
+    {mode === "register" ? (
+      <>
+        <InputField
+          label="Full Name"
+          id="name"
+          placeholder="Enter your full name"
+          onChange={(v) => setFormData({ ...formData, name: v ,mode:"patient"})}
+        />
 
-            <FormButtons onCancel={() => setActiveForm(null)} color="blue" text={mode === "register" ? "Submit" : "Verify"}/>
-          </form>
-        )}
+        {/* Gender */}
+        <div className="space-y-2">
+          <Label htmlFor="gender">Gender</Label>
+          <Select onValueChange={(value) => setFormData({ ...formData, gender: value })}>
+            <SelectTrigger><SelectValue placeholder="Select gender" /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="male">Male</SelectItem>
+              <SelectItem value="female">Female</SelectItem>
+              <SelectItem value="other">Other</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <InputField
+          label="Date of Birth"
+          id="dob"
+          type="date"
+          onChange={(v) => setFormData({ ...formData, dob: v })}
+        />
+
+        {/* ✅ Blood Group Dropdown */}
+        <div className="space-y-2">
+          <Label htmlFor="bloodGroup">Blood Group</Label>
+          <Select onValueChange={(value) => setFormData({ ...formData, bloodGroup: value })}>
+            <SelectTrigger><SelectValue placeholder="Select blood group" /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="A+">A+</SelectItem>
+              <SelectItem value="A-">A-</SelectItem>
+              <SelectItem value="B+">B+</SelectItem>
+              <SelectItem value="B-">B-</SelectItem>
+              <SelectItem value="AB+">AB+</SelectItem>
+              <SelectItem value="AB-">AB-</SelectItem>
+              <SelectItem value="O+">O+</SelectItem>
+              <SelectItem value="O-">O-</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <InputField
+          label="Contact Number"
+          id="contact"
+          type="tel"
+          placeholder="+91 99999 99999"
+          onChange={(v) => setFormData({ ...formData, contact: v })}
+        />
+
+        <InputField
+          label="Home Address"
+          id="address"
+          placeholder="Enter your full home address"
+          onChange={(v) => setFormData({ ...formData, address: v })}
+        />
+      </>
+    ) : (
+      <p className="text-gray-600 text-sm">
+        To log in, please connect your wallet. Your account will be verified automatically.
+      </p>
+    )}
+
+    <FormButtons
+      onCancel={() => setActiveForm(null)}
+      color="blue"
+      text={mode === "register" ? "Submit" : "Verify"}
+    />
+  </form>
+)}
+
 
         {/* Doctor Form */}
         {activeForm === "doctor" && (
@@ -118,7 +151,7 @@ export default function AuthModal({
                   label="Full Name"
                   id="doctorName"
                   placeholder="Dr. John Doe"
-                  onChange={(v) => setFormData({ ...formData, name: v })}
+                  onChange={(v) => setFormData({ ...formData, name: v,mode:"doctor" })}
                 />
                 <InputField
                   label="License / IPFS Hash"

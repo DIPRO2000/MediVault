@@ -49,8 +49,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [
@@ -79,8 +78,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [
@@ -125,8 +123,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [
@@ -145,8 +142,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     }
   ],
   "metadata": "{\"compiler\":{\"version\":\"0.8.30+commit.73712a01\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"doctor\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"ipfsHash\",\"type\":\"string\"}],\"name\":\"DoctorRegistered\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"doctor\",\"type\":\"address\"}],\"name\":\"DoctorVerified\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"admin\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"doctors\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"ipfsHash\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"verified\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"registered\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_doctor\",\"type\":\"address\"}],\"name\":\"getDoctorDetails\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_doctor\",\"type\":\"address\"}],\"name\":\"isVerified\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_ipfsHash\",\"type\":\"string\"}],\"name\":\"registerDoctor\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_doctor\",\"type\":\"address\"}],\"name\":\"verifyDoctor\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/DoctorRegistry.sol\":\"DoctorRegistry\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/DoctorRegistry.sol\":{\"keccak256\":\"0x74dba3dc69345104f09b0c510107743ba1ed14f4eb9ac6738eea5b590b9d88c7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://84a446e7261496305f8e4c5049a9dbac766b2bf1ded1d1df055741afcdc730d1\",\"dweb:/ipfs/QmVh3yoPohaPfyqx1tqDcdbiFCSEQvzRWSwhmbvadgTGbe\"]}},\"version\":1}",
@@ -9386,15 +9382,15 @@
     "absolutePath": "project:/contracts/DoctorRegistry.sol",
     "exportedSymbols": {
       "DoctorRegistry": [
-        240
+        296
       ]
     },
-    "id": 241,
+    "id": 297,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 80,
+        "id": 136,
         "literals": [
           "solidity",
           "^",
@@ -9411,9 +9407,9 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": true,
-        "id": 240,
+        "id": 296,
         "linearizedBaseContracts": [
-          240
+          296
         ],
         "name": "DoctorRegistry",
         "nameLocation": "70:14:1",
@@ -9422,12 +9418,12 @@
           {
             "constant": false,
             "functionSelector": "f851a440",
-            "id": 82,
+            "id": 138,
             "mutability": "mutable",
             "name": "admin",
             "nameLocation": "107:5:1",
             "nodeType": "VariableDeclaration",
-            "scope": 240,
+            "scope": 296,
             "src": "92:20:1",
             "stateVariable": true,
             "storageLocation": "default",
@@ -9436,7 +9432,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 81,
+              "id": 137,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "92:7:1",
@@ -9450,16 +9446,16 @@
           },
           {
             "canonicalName": "DoctorRegistry.Doctor",
-            "id": 89,
+            "id": 145,
             "members": [
               {
                 "constant": false,
-                "id": 84,
+                "id": 140,
                 "mutability": "mutable",
                 "name": "ipfsHash",
                 "nameLocation": "153:8:1",
                 "nodeType": "VariableDeclaration",
-                "scope": 89,
+                "scope": 145,
                 "src": "146:15:1",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -9468,7 +9464,7 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 83,
+                  "id": 139,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
                   "src": "146:6:1",
@@ -9481,12 +9477,12 @@
               },
               {
                 "constant": false,
-                "id": 86,
+                "id": 142,
                 "mutability": "mutable",
                 "name": "verified",
                 "nameLocation": "249:8:1",
                 "nodeType": "VariableDeclaration",
-                "scope": 89,
+                "scope": 145,
                 "src": "244:13:1",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -9495,7 +9491,7 @@
                   "typeString": "bool"
                 },
                 "typeName": {
-                  "id": 85,
+                  "id": 141,
                   "name": "bool",
                   "nodeType": "ElementaryTypeName",
                   "src": "244:4:1",
@@ -9508,12 +9504,12 @@
               },
               {
                 "constant": false,
-                "id": 88,
+                "id": 144,
                 "mutability": "mutable",
                 "name": "registered",
                 "nameLocation": "323:10:1",
                 "nodeType": "VariableDeclaration",
-                "scope": 89,
+                "scope": 145,
                 "src": "318:15:1",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -9522,7 +9518,7 @@
                   "typeString": "bool"
                 },
                 "typeName": {
-                  "id": 87,
+                  "id": 143,
                   "name": "bool",
                   "nodeType": "ElementaryTypeName",
                   "src": "318:4:1",
@@ -9537,32 +9533,32 @@
             "name": "Doctor",
             "nameLocation": "128:6:1",
             "nodeType": "StructDefinition",
-            "scope": 240,
+            "scope": 296,
             "src": "121:260:1",
             "visibility": "public"
           },
           {
             "constant": false,
             "functionSelector": "a9583c22",
-            "id": 94,
+            "id": 150,
             "mutability": "mutable",
             "name": "doctors",
             "nameLocation": "423:7:1",
             "nodeType": "VariableDeclaration",
-            "scope": 240,
+            "scope": 296,
             "src": "389:41:1",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Doctor_$89_storage_$",
+              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Doctor_$145_storage_$",
               "typeString": "mapping(address => struct DoctorRegistry.Doctor)"
             },
             "typeName": {
-              "id": 93,
+              "id": 149,
               "keyName": "",
               "keyNameLocation": "-1:-1:-1",
               "keyType": {
-                "id": 90,
+                "id": 146,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
                 "src": "397:7:1",
@@ -9574,28 +9570,28 @@
               "nodeType": "Mapping",
               "src": "389:26:1",
               "typeDescriptions": {
-                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Doctor_$89_storage_$",
+                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Doctor_$145_storage_$",
                 "typeString": "mapping(address => struct DoctorRegistry.Doctor)"
               },
               "valueName": "",
               "valueNameLocation": "-1:-1:-1",
               "valueType": {
-                "id": 92,
+                "id": 148,
                 "nodeType": "UserDefinedTypeName",
                 "pathNode": {
-                  "id": 91,
+                  "id": 147,
                   "name": "Doctor",
                   "nameLocations": [
                     "408:6:1"
                   ],
                   "nodeType": "IdentifierPath",
-                  "referencedDeclaration": 89,
+                  "referencedDeclaration": 145,
                   "src": "408:6:1"
                 },
-                "referencedDeclaration": 89,
+                "referencedDeclaration": 145,
                 "src": "408:6:1",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_Doctor_$89_storage_ptr",
+                  "typeIdentifier": "t_struct$_Doctor_$145_storage_ptr",
                   "typeString": "struct DoctorRegistry.Doctor"
                 }
               }
@@ -9605,23 +9601,23 @@
           {
             "anonymous": false,
             "eventSelector": "20481b8112b5bf4734f45a473c373db9df6a79ce946cdc0e7dbc22b4f7d7f986",
-            "id": 100,
+            "id": 156,
             "name": "DoctorRegistered",
             "nameLocation": "445:16:1",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 99,
+              "id": 155,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 96,
+                  "id": 152,
                   "indexed": true,
                   "mutability": "mutable",
                   "name": "doctor",
                   "nameLocation": "478:6:1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 100,
+                  "scope": 156,
                   "src": "462:22:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -9630,7 +9626,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 95,
+                    "id": 151,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "462:7:1",
@@ -9644,13 +9640,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 98,
+                  "id": 154,
                   "indexed": false,
                   "mutability": "mutable",
                   "name": "ipfsHash",
                   "nameLocation": "493:8:1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 100,
+                  "scope": 156,
                   "src": "486:15:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -9659,7 +9655,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 97,
+                    "id": 153,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "486:6:1",
@@ -9678,23 +9674,23 @@
           {
             "anonymous": false,
             "eventSelector": "b0859f2cf042b300c8948cdd785ec6a23a3742bc5446c19f4b270b67fac2c967",
-            "id": 104,
+            "id": 160,
             "name": "DoctorVerified",
             "nameLocation": "515:14:1",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 103,
+              "id": 159,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 102,
+                  "id": 158,
                   "indexed": true,
                   "mutability": "mutable",
                   "name": "doctor",
                   "nameLocation": "546:6:1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 104,
+                  "scope": 160,
                   "src": "530:22:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -9703,7 +9699,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 101,
+                    "id": 157,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "530:7:1",
@@ -9722,7 +9718,7 @@
           },
           {
             "body": {
-              "id": 115,
+              "id": 171,
               "nodeType": "Block",
               "src": "583:72:1",
               "statements": [
@@ -9734,14 +9730,14 @@
                           "typeIdentifier": "t_address",
                           "typeString": "address"
                         },
-                        "id": 110,
+                        "id": 166,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "leftExpression": {
                           "expression": {
-                            "id": 107,
+                            "id": 163,
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
@@ -9752,7 +9748,7 @@
                               "typeString": "msg"
                             }
                           },
-                          "id": 108,
+                          "id": 164,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -9769,11 +9765,11 @@
                         "nodeType": "BinaryOperation",
                         "operator": "==",
                         "rightExpression": {
-                          "id": 109,
+                          "id": 165,
                           "name": "admin",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 82,
+                          "referencedDeclaration": 138,
                           "src": "616:5:1",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
@@ -9788,7 +9784,7 @@
                       },
                       {
                         "hexValue": "4e6f742061646d696e",
-                        "id": 111,
+                        "id": 167,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -9814,7 +9810,7 @@
                           "typeString": "literal_string \"Not admin\""
                         }
                       ],
-                      "id": 106,
+                      "id": 162,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -9829,7 +9825,7 @@
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 112,
+                    "id": 168,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -9845,23 +9841,23 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 113,
+                  "id": 169,
                   "nodeType": "ExpressionStatement",
                   "src": "594:41:1"
                 },
                 {
-                  "id": 114,
+                  "id": 170,
                   "nodeType": "PlaceholderStatement",
                   "src": "646:1:1"
                 }
               ]
             },
-            "id": 116,
+            "id": 172,
             "name": "onlyAdmin",
             "nameLocation": "571:9:1",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 105,
+              "id": 161,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "580:2:1"
@@ -9872,23 +9868,23 @@
           },
           {
             "body": {
-              "id": 124,
+              "id": 180,
               "nodeType": "Block",
               "src": "677:37:1",
               "statements": [
                 {
                   "expression": {
-                    "id": 122,
+                    "id": 178,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
-                      "id": 119,
+                      "id": 175,
                       "name": "admin",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 82,
+                      "referencedDeclaration": 138,
                       "src": "688:5:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -9899,7 +9895,7 @@
                     "operator": "=",
                     "rightHandSide": {
                       "expression": {
-                        "id": 120,
+                        "id": 176,
                         "name": "msg",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
@@ -9910,7 +9906,7 @@
                           "typeString": "msg"
                         }
                       },
-                      "id": 121,
+                      "id": 177,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -9930,13 +9926,13 @@
                       "typeString": "address"
                     }
                   },
-                  "id": 123,
+                  "id": 179,
                   "nodeType": "ExpressionStatement",
                   "src": "688:18:1"
                 }
               ]
             },
-            "id": 125,
+            "id": 181,
             "implemented": true,
             "kind": "constructor",
             "modifiers": [],
@@ -9944,18 +9940,18 @@
             "nameLocation": "-1:-1:-1",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 117,
+              "id": 173,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "674:2:1"
             },
             "returnParameters": {
-              "id": 118,
+              "id": 174,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "677:0:1"
             },
-            "scope": 240,
+            "scope": 296,
             "src": "663:51:1",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -9963,7 +9959,7 @@
           },
           {
             "body": {
-              "id": 168,
+              "id": 224,
               "nodeType": "Block",
               "src": "860:355:1",
               "statements": [
@@ -9971,7 +9967,7 @@
                   "expression": {
                     "arguments": [
                       {
-                        "id": 136,
+                        "id": 192,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -9983,21 +9979,21 @@
                         "subExpression": {
                           "expression": {
                             "baseExpression": {
-                              "id": 131,
+                              "id": 187,
                               "name": "doctors",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 94,
+                              "referencedDeclaration": 150,
                               "src": "880:7:1",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Doctor_$89_storage_$",
+                                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Doctor_$145_storage_$",
                                 "typeString": "mapping(address => struct DoctorRegistry.Doctor storage ref)"
                               }
                             },
-                            "id": 134,
+                            "id": 190,
                             "indexExpression": {
                               "expression": {
-                                "id": 132,
+                                "id": 188,
                                 "name": "msg",
                                 "nodeType": "Identifier",
                                 "overloadedDeclarations": [],
@@ -10008,7 +10004,7 @@
                                   "typeString": "msg"
                                 }
                               },
-                              "id": 133,
+                              "id": 189,
                               "isConstant": false,
                               "isLValue": false,
                               "isPure": false,
@@ -10029,11 +10025,11 @@
                             "nodeType": "IndexAccess",
                             "src": "880:19:1",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_Doctor_$89_storage",
+                              "typeIdentifier": "t_struct$_Doctor_$145_storage",
                               "typeString": "struct DoctorRegistry.Doctor storage ref"
                             }
                           },
-                          "id": 135,
+                          "id": 191,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
@@ -10041,7 +10037,7 @@
                           "memberLocation": "900:10:1",
                           "memberName": "registered",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 88,
+                          "referencedDeclaration": 144,
                           "src": "880:30:1",
                           "typeDescriptions": {
                             "typeIdentifier": "t_bool",
@@ -10055,7 +10051,7 @@
                       },
                       {
                         "hexValue": "416c72656164792072656769737465726564",
-                        "id": 137,
+                        "id": 193,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -10081,7 +10077,7 @@
                           "typeString": "literal_string \"Already registered\""
                         }
                       ],
-                      "id": 130,
+                      "id": 186,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -10096,7 +10092,7 @@
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 138,
+                    "id": 194,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -10112,7 +10108,7 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 139,
+                  "id": 195,
                   "nodeType": "ExpressionStatement",
                   "src": "871:62:1"
                 },
@@ -10124,7 +10120,7 @@
                           "typeIdentifier": "t_uint256",
                           "typeString": "uint256"
                         },
-                        "id": 147,
+                        "id": 203,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -10133,11 +10129,11 @@
                           "expression": {
                             "arguments": [
                               {
-                                "id": 143,
+                                "id": 199,
                                 "name": "_ipfsHash",
                                 "nodeType": "Identifier",
                                 "overloadedDeclarations": [],
-                                "referencedDeclaration": 127,
+                                "referencedDeclaration": 183,
                                 "src": "958:9:1",
                                 "typeDescriptions": {
                                   "typeIdentifier": "t_string_memory_ptr",
@@ -10152,7 +10148,7 @@
                                   "typeString": "string memory"
                                 }
                               ],
-                              "id": 142,
+                              "id": 198,
                               "isConstant": false,
                               "isLValue": false,
                               "isPure": true,
@@ -10164,14 +10160,14 @@
                                 "typeString": "type(bytes storage pointer)"
                               },
                               "typeName": {
-                                "id": 141,
+                                "id": 197,
                                 "name": "bytes",
                                 "nodeType": "ElementaryTypeName",
                                 "src": "952:5:1",
                                 "typeDescriptions": {}
                               }
                             },
-                            "id": 144,
+                            "id": 200,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
@@ -10187,7 +10183,7 @@
                               "typeString": "bytes memory"
                             }
                           },
-                          "id": 145,
+                          "id": 201,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -10205,7 +10201,7 @@
                         "operator": ">",
                         "rightExpression": {
                           "hexValue": "30",
-                          "id": 146,
+                          "id": 202,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
@@ -10227,7 +10223,7 @@
                       },
                       {
                         "hexValue": "496e76616c696420495046532068617368",
-                        "id": 148,
+                        "id": 204,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -10253,7 +10249,7 @@
                           "typeString": "literal_string \"Invalid IPFS hash\""
                         }
                       ],
-                      "id": 140,
+                      "id": 196,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -10268,7 +10264,7 @@
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 149,
+                    "id": 205,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -10284,34 +10280,34 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 150,
+                  "id": 206,
                   "nodeType": "ExpressionStatement",
                   "src": "944:57:1"
                 },
                 {
                   "expression": {
-                    "id": 160,
+                    "id": 216,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "baseExpression": {
-                        "id": 151,
+                        "id": 207,
                         "name": "doctors",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 94,
+                        "referencedDeclaration": 150,
                         "src": "1014:7:1",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Doctor_$89_storage_$",
+                          "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Doctor_$145_storage_$",
                           "typeString": "mapping(address => struct DoctorRegistry.Doctor storage ref)"
                         }
                       },
-                      "id": 154,
+                      "id": 210,
                       "indexExpression": {
                         "expression": {
-                          "id": 152,
+                          "id": 208,
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
@@ -10322,7 +10318,7 @@
                             "typeString": "msg"
                           }
                         },
-                        "id": 153,
+                        "id": 209,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -10343,7 +10339,7 @@
                       "nodeType": "IndexAccess",
                       "src": "1014:19:1",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Doctor_$89_storage",
+                        "typeIdentifier": "t_struct$_Doctor_$145_storage",
                         "typeString": "struct DoctorRegistry.Doctor storage ref"
                       }
                     },
@@ -10352,11 +10348,11 @@
                     "rightHandSide": {
                       "arguments": [
                         {
-                          "id": 156,
+                          "id": 212,
                           "name": "_ipfsHash",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 127,
+                          "referencedDeclaration": 183,
                           "src": "1068:9:1",
                           "typeDescriptions": {
                             "typeIdentifier": "t_string_memory_ptr",
@@ -10365,7 +10361,7 @@
                         },
                         {
                           "hexValue": "66616c7365",
-                          "id": 157,
+                          "id": 213,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
@@ -10381,7 +10377,7 @@
                         },
                         {
                           "hexValue": "74727565",
-                          "id": 158,
+                          "id": 214,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
@@ -10411,18 +10407,18 @@
                             "typeString": "bool"
                           }
                         ],
-                        "id": 155,
+                        "id": 211,
                         "name": "Doctor",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 89,
+                        "referencedDeclaration": 145,
                         "src": "1036:6:1",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_struct$_Doctor_$89_storage_ptr_$",
+                          "typeIdentifier": "t_type$_t_struct$_Doctor_$145_storage_ptr_$",
                           "typeString": "type(struct DoctorRegistry.Doctor storage pointer)"
                         }
                       },
-                      "id": 159,
+                      "id": 215,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -10442,17 +10438,17 @@
                       "src": "1036:114:1",
                       "tryCall": false,
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Doctor_$89_memory_ptr",
+                        "typeIdentifier": "t_struct$_Doctor_$145_memory_ptr",
                         "typeString": "struct DoctorRegistry.Doctor memory"
                       }
                     },
                     "src": "1014:136:1",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Doctor_$89_storage",
+                      "typeIdentifier": "t_struct$_Doctor_$145_storage",
                       "typeString": "struct DoctorRegistry.Doctor storage ref"
                     }
                   },
-                  "id": 161,
+                  "id": 217,
                   "nodeType": "ExpressionStatement",
                   "src": "1014:136:1"
                 },
@@ -10461,7 +10457,7 @@
                     "arguments": [
                       {
                         "expression": {
-                          "id": 163,
+                          "id": 219,
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
@@ -10472,7 +10468,7 @@
                             "typeString": "msg"
                           }
                         },
-                        "id": 164,
+                        "id": 220,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -10487,11 +10483,11 @@
                         }
                       },
                       {
-                        "id": 165,
+                        "id": 221,
                         "name": "_ipfsHash",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 127,
+                        "referencedDeclaration": 183,
                         "src": "1197:9:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_string_memory_ptr",
@@ -10510,18 +10506,18 @@
                           "typeString": "string memory"
                         }
                       ],
-                      "id": 162,
+                      "id": 218,
                       "name": "DoctorRegistered",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 100,
+                      "referencedDeclaration": 156,
                       "src": "1168:16:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_address_$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (address,string memory)"
                       }
                     },
-                    "id": 166,
+                    "id": 222,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -10537,14 +10533,14 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 167,
+                  "id": 223,
                   "nodeType": "EmitStatement",
                   "src": "1163:44:1"
                 }
               ]
             },
             "functionSelector": "8f09ab5b",
-            "id": 169,
+            "id": 225,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -10552,17 +10548,17 @@
             "nameLocation": "811:14:1",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 128,
+              "id": 184,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 127,
+                  "id": 183,
                   "mutability": "mutable",
                   "name": "_ipfsHash",
                   "nameLocation": "840:9:1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 169,
+                  "scope": 225,
                   "src": "826:23:1",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -10571,7 +10567,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 126,
+                    "id": 182,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "826:6:1",
@@ -10586,12 +10582,12 @@
               "src": "825:25:1"
             },
             "returnParameters": {
-              "id": 129,
+              "id": 185,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "860:0:1"
             },
-            "scope": 240,
+            "scope": 296,
             "src": "802:413:1",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -10599,7 +10595,7 @@
           },
           {
             "body": {
-              "id": 204,
+              "id": 260,
               "nodeType": "Block",
               "src": "1350:230:1",
               "statements": [
@@ -10609,24 +10605,24 @@
                       {
                         "expression": {
                           "baseExpression": {
-                            "id": 177,
+                            "id": 233,
                             "name": "doctors",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 94,
+                            "referencedDeclaration": 150,
                             "src": "1369:7:1",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Doctor_$89_storage_$",
+                              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Doctor_$145_storage_$",
                               "typeString": "mapping(address => struct DoctorRegistry.Doctor storage ref)"
                             }
                           },
-                          "id": 179,
+                          "id": 235,
                           "indexExpression": {
-                            "id": 178,
+                            "id": 234,
                             "name": "_doctor",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 171,
+                            "referencedDeclaration": 227,
                             "src": "1377:7:1",
                             "typeDescriptions": {
                               "typeIdentifier": "t_address",
@@ -10640,11 +10636,11 @@
                           "nodeType": "IndexAccess",
                           "src": "1369:16:1",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_Doctor_$89_storage",
+                            "typeIdentifier": "t_struct$_Doctor_$145_storage",
                             "typeString": "struct DoctorRegistry.Doctor storage ref"
                           }
                         },
-                        "id": 180,
+                        "id": 236,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
@@ -10652,7 +10648,7 @@
                         "memberLocation": "1386:10:1",
                         "memberName": "registered",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 88,
+                        "referencedDeclaration": 144,
                         "src": "1369:27:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
@@ -10661,7 +10657,7 @@
                       },
                       {
                         "hexValue": "446f63746f72206e6f742072656769737465726564",
-                        "id": 181,
+                        "id": 237,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -10687,7 +10683,7 @@
                           "typeString": "literal_string \"Doctor not registered\""
                         }
                       ],
-                      "id": 176,
+                      "id": 232,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -10702,7 +10698,7 @@
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 182,
+                    "id": 238,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -10718,7 +10714,7 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 183,
+                  "id": 239,
                   "nodeType": "ExpressionStatement",
                   "src": "1361:61:1"
                 },
@@ -10726,7 +10722,7 @@
                   "expression": {
                     "arguments": [
                       {
-                        "id": 189,
+                        "id": 245,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -10738,24 +10734,24 @@
                         "subExpression": {
                           "expression": {
                             "baseExpression": {
-                              "id": 185,
+                              "id": 241,
                               "name": "doctors",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 94,
+                              "referencedDeclaration": 150,
                               "src": "1442:7:1",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Doctor_$89_storage_$",
+                                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Doctor_$145_storage_$",
                                 "typeString": "mapping(address => struct DoctorRegistry.Doctor storage ref)"
                               }
                             },
-                            "id": 187,
+                            "id": 243,
                             "indexExpression": {
-                              "id": 186,
+                              "id": 242,
                               "name": "_doctor",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 171,
+                              "referencedDeclaration": 227,
                               "src": "1450:7:1",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_address",
@@ -10769,11 +10765,11 @@
                             "nodeType": "IndexAccess",
                             "src": "1442:16:1",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_Doctor_$89_storage",
+                              "typeIdentifier": "t_struct$_Doctor_$145_storage",
                               "typeString": "struct DoctorRegistry.Doctor storage ref"
                             }
                           },
-                          "id": 188,
+                          "id": 244,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
@@ -10781,7 +10777,7 @@
                           "memberLocation": "1459:8:1",
                           "memberName": "verified",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 86,
+                          "referencedDeclaration": 142,
                           "src": "1442:25:1",
                           "typeDescriptions": {
                             "typeIdentifier": "t_bool",
@@ -10795,7 +10791,7 @@
                       },
                       {
                         "hexValue": "416c7265616479207665726966696564",
-                        "id": 190,
+                        "id": 246,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -10821,7 +10817,7 @@
                           "typeString": "literal_string \"Already verified\""
                         }
                       ],
-                      "id": 184,
+                      "id": 240,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -10836,7 +10832,7 @@
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 191,
+                    "id": 247,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -10852,13 +10848,13 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 192,
+                  "id": 248,
                   "nodeType": "ExpressionStatement",
                   "src": "1433:55:1"
                 },
                 {
                   "expression": {
-                    "id": 198,
+                    "id": 254,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -10866,24 +10862,24 @@
                     "leftHandSide": {
                       "expression": {
                         "baseExpression": {
-                          "id": 193,
+                          "id": 249,
                           "name": "doctors",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 94,
+                          "referencedDeclaration": 150,
                           "src": "1501:7:1",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Doctor_$89_storage_$",
+                            "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Doctor_$145_storage_$",
                             "typeString": "mapping(address => struct DoctorRegistry.Doctor storage ref)"
                           }
                         },
-                        "id": 195,
+                        "id": 251,
                         "indexExpression": {
-                          "id": 194,
+                          "id": 250,
                           "name": "_doctor",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 171,
+                          "referencedDeclaration": 227,
                           "src": "1509:7:1",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
@@ -10897,11 +10893,11 @@
                         "nodeType": "IndexAccess",
                         "src": "1501:16:1",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Doctor_$89_storage",
+                          "typeIdentifier": "t_struct$_Doctor_$145_storage",
                           "typeString": "struct DoctorRegistry.Doctor storage ref"
                         }
                       },
-                      "id": 196,
+                      "id": 252,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
@@ -10909,7 +10905,7 @@
                       "memberLocation": "1518:8:1",
                       "memberName": "verified",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 86,
+                      "referencedDeclaration": 142,
                       "src": "1501:25:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_bool",
@@ -10920,7 +10916,7 @@
                     "operator": "=",
                     "rightHandSide": {
                       "hexValue": "74727565",
-                      "id": 197,
+                      "id": 253,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -10940,7 +10936,7 @@
                       "typeString": "bool"
                     }
                   },
-                  "id": 199,
+                  "id": 255,
                   "nodeType": "ExpressionStatement",
                   "src": "1501:32:1"
                 },
@@ -10948,11 +10944,11 @@
                   "eventCall": {
                     "arguments": [
                       {
-                        "id": 201,
+                        "id": 257,
                         "name": "_doctor",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 171,
+                        "referencedDeclaration": 227,
                         "src": "1564:7:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -10967,18 +10963,18 @@
                           "typeString": "address"
                         }
                       ],
-                      "id": 200,
+                      "id": 256,
                       "name": "DoctorVerified",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 104,
+                      "referencedDeclaration": 160,
                       "src": "1549:14:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 202,
+                    "id": 258,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -10994,28 +10990,28 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 203,
+                  "id": 259,
                   "nodeType": "EmitStatement",
                   "src": "1544:28:1"
                 }
               ]
             },
             "functionSelector": "d80cb05c",
-            "id": 205,
+            "id": 261,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
-                "id": 174,
+                "id": 230,
                 "kind": "modifierInvocation",
                 "modifierName": {
-                  "id": 173,
+                  "id": 229,
                   "name": "onlyAdmin",
                   "nameLocations": [
                     "1340:9:1"
                   ],
                   "nodeType": "IdentifierPath",
-                  "referencedDeclaration": 116,
+                  "referencedDeclaration": 172,
                   "src": "1340:9:1"
                 },
                 "nodeType": "ModifierInvocation",
@@ -11026,17 +11022,17 @@
             "nameLocation": "1301:12:1",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 172,
+              "id": 228,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 171,
+                  "id": 227,
                   "mutability": "mutable",
                   "name": "_doctor",
                   "nameLocation": "1322:7:1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 205,
+                  "scope": 261,
                   "src": "1314:15:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -11045,7 +11041,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 170,
+                    "id": 226,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1314:7:1",
@@ -11061,12 +11057,12 @@
               "src": "1313:17:1"
             },
             "returnParameters": {
-              "id": 175,
+              "id": 231,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1350:0:1"
             },
-            "scope": 240,
+            "scope": 296,
             "src": "1292:288:1",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -11074,7 +11070,7 @@
           },
           {
             "body": {
-              "id": 217,
+              "id": 273,
               "nodeType": "Block",
               "src": "1711:51:1",
               "statements": [
@@ -11082,24 +11078,24 @@
                   "expression": {
                     "expression": {
                       "baseExpression": {
-                        "id": 212,
+                        "id": 268,
                         "name": "doctors",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 94,
+                        "referencedDeclaration": 150,
                         "src": "1729:7:1",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Doctor_$89_storage_$",
+                          "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Doctor_$145_storage_$",
                           "typeString": "mapping(address => struct DoctorRegistry.Doctor storage ref)"
                         }
                       },
-                      "id": 214,
+                      "id": 270,
                       "indexExpression": {
-                        "id": 213,
+                        "id": 269,
                         "name": "_doctor",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 207,
+                        "referencedDeclaration": 263,
                         "src": "1737:7:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -11113,11 +11109,11 @@
                       "nodeType": "IndexAccess",
                       "src": "1729:16:1",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Doctor_$89_storage",
+                        "typeIdentifier": "t_struct$_Doctor_$145_storage",
                         "typeString": "struct DoctorRegistry.Doctor storage ref"
                       }
                     },
-                    "id": 215,
+                    "id": 271,
                     "isConstant": false,
                     "isLValue": true,
                     "isPure": false,
@@ -11125,22 +11121,22 @@
                     "memberLocation": "1746:8:1",
                     "memberName": "verified",
                     "nodeType": "MemberAccess",
-                    "referencedDeclaration": 86,
+                    "referencedDeclaration": 142,
                     "src": "1729:25:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     }
                   },
-                  "functionReturnParameters": 211,
-                  "id": 216,
+                  "functionReturnParameters": 267,
+                  "id": 272,
                   "nodeType": "Return",
                   "src": "1722:32:1"
                 }
               ]
             },
             "functionSelector": "b9209e33",
-            "id": 218,
+            "id": 274,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -11148,17 +11144,17 @@
             "nameLocation": "1654:10:1",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 208,
+              "id": 264,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 207,
+                  "id": 263,
                   "mutability": "mutable",
                   "name": "_doctor",
                   "nameLocation": "1673:7:1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 218,
+                  "scope": 274,
                   "src": "1665:15:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -11167,7 +11163,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 206,
+                    "id": 262,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1665:7:1",
@@ -11183,17 +11179,17 @@
               "src": "1664:17:1"
             },
             "returnParameters": {
-              "id": 211,
+              "id": 267,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 210,
+                  "id": 266,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 218,
+                  "scope": 274,
                   "src": "1705:4:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -11202,7 +11198,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 209,
+                    "id": 265,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "1705:4:1",
@@ -11216,7 +11212,7 @@
               ],
               "src": "1704:6:1"
             },
-            "scope": 240,
+            "scope": 296,
             "src": "1645:117:1",
             "stateMutability": "view",
             "virtual": false,
@@ -11224,7 +11220,7 @@
           },
           {
             "body": {
-              "id": 238,
+              "id": 294,
               "nodeType": "Block",
               "src": "1900:123:1",
               "statements": [
@@ -11234,24 +11230,24 @@
                       {
                         "expression": {
                           "baseExpression": {
-                            "id": 226,
+                            "id": 282,
                             "name": "doctors",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 94,
+                            "referencedDeclaration": 150,
                             "src": "1919:7:1",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Doctor_$89_storage_$",
+                              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Doctor_$145_storage_$",
                               "typeString": "mapping(address => struct DoctorRegistry.Doctor storage ref)"
                             }
                           },
-                          "id": 228,
+                          "id": 284,
                           "indexExpression": {
-                            "id": 227,
+                            "id": 283,
                             "name": "_doctor",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 220,
+                            "referencedDeclaration": 276,
                             "src": "1927:7:1",
                             "typeDescriptions": {
                               "typeIdentifier": "t_address",
@@ -11265,11 +11261,11 @@
                           "nodeType": "IndexAccess",
                           "src": "1919:16:1",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_Doctor_$89_storage",
+                            "typeIdentifier": "t_struct$_Doctor_$145_storage",
                             "typeString": "struct DoctorRegistry.Doctor storage ref"
                           }
                         },
-                        "id": 229,
+                        "id": 285,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
@@ -11277,7 +11273,7 @@
                         "memberLocation": "1936:10:1",
                         "memberName": "registered",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 88,
+                        "referencedDeclaration": 144,
                         "src": "1919:27:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
@@ -11286,7 +11282,7 @@
                       },
                       {
                         "hexValue": "446f63746f72206e6f742072656769737465726564",
-                        "id": 230,
+                        "id": 286,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -11312,7 +11308,7 @@
                           "typeString": "literal_string \"Doctor not registered\""
                         }
                       ],
-                      "id": 225,
+                      "id": 281,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -11327,7 +11323,7 @@
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 231,
+                    "id": 287,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -11343,7 +11339,7 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 232,
+                  "id": 288,
                   "nodeType": "ExpressionStatement",
                   "src": "1911:61:1"
                 },
@@ -11351,24 +11347,24 @@
                   "expression": {
                     "expression": {
                       "baseExpression": {
-                        "id": 233,
+                        "id": 289,
                         "name": "doctors",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 94,
+                        "referencedDeclaration": 150,
                         "src": "1990:7:1",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Doctor_$89_storage_$",
+                          "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Doctor_$145_storage_$",
                           "typeString": "mapping(address => struct DoctorRegistry.Doctor storage ref)"
                         }
                       },
-                      "id": 235,
+                      "id": 291,
                       "indexExpression": {
-                        "id": 234,
+                        "id": 290,
                         "name": "_doctor",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 220,
+                        "referencedDeclaration": 276,
                         "src": "1998:7:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -11382,11 +11378,11 @@
                       "nodeType": "IndexAccess",
                       "src": "1990:16:1",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Doctor_$89_storage",
+                        "typeIdentifier": "t_struct$_Doctor_$145_storage",
                         "typeString": "struct DoctorRegistry.Doctor storage ref"
                       }
                     },
-                    "id": 236,
+                    "id": 292,
                     "isConstant": false,
                     "isLValue": true,
                     "isPure": false,
@@ -11394,22 +11390,22 @@
                     "memberLocation": "2007:8:1",
                     "memberName": "ipfsHash",
                     "nodeType": "MemberAccess",
-                    "referencedDeclaration": 84,
+                    "referencedDeclaration": 140,
                     "src": "1990:25:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage",
                       "typeString": "string storage ref"
                     }
                   },
-                  "functionReturnParameters": 224,
-                  "id": 237,
+                  "functionReturnParameters": 280,
+                  "id": 293,
                   "nodeType": "Return",
                   "src": "1983:32:1"
                 }
               ]
             },
             "functionSelector": "bab90dbd",
-            "id": 239,
+            "id": 295,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -11417,17 +11413,17 @@
             "nameLocation": "1828:16:1",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 221,
+              "id": 277,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 220,
+                  "id": 276,
                   "mutability": "mutable",
                   "name": "_doctor",
                   "nameLocation": "1853:7:1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 239,
+                  "scope": 295,
                   "src": "1845:15:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -11436,7 +11432,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 219,
+                    "id": 275,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1845:7:1",
@@ -11452,17 +11448,17 @@
               "src": "1844:17:1"
             },
             "returnParameters": {
-              "id": 224,
+              "id": 280,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 223,
+                  "id": 279,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 239,
+                  "scope": 295,
                   "src": "1885:13:1",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -11471,7 +11467,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 222,
+                    "id": 278,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "1885:6:1",
@@ -11485,19 +11481,19 @@
               ],
               "src": "1884:15:1"
             },
-            "scope": 240,
+            "scope": 296,
             "src": "1819:204:1",
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 241,
+        "scope": 297,
         "src": "61:1965:1",
         "usedErrors": [],
         "usedEvents": [
-          100,
-          104
+          156,
+          160
         ]
       }
     ],
@@ -11511,13 +11507,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x6953f642310BF85Af884A7Cb5BAB232A16a45489",
-      "transactionHash": "0xdbfd468b75acdae026465bc84104a2fbcc2c130dcea8ccb73a22feb53ffc417c"
+      "address": "0xdA14184525568c7F2035eA018FD37c8663C694a4",
+      "transactionHash": "0x137b73f9b37baba5c3dd13019491de27ca72c55cd0219c99854a53f8422a248b"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2025-11-03T06:51:46.415Z",
-  "networkType": "ethereum",
+  "updatedAt": "2025-11-03T19:35:11.626Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

@@ -2,23 +2,46 @@
 pragma solidity ^0.8.20;
 
 contract AccessControl {
-    // fileHash => list of addresses that have access
-    mapping(bytes32 => mapping(address => bool)) public fileAccess;
+    // fileHash (string) => (doctor address => access granted)
+    mapping(string => mapping(address => bool)) private fileAccess;
 
-    event AccessGranted(bytes32 indexed fileHash, address indexed doctor);
-    event AccessRevoked(bytes32 indexed fileHash, address indexed doctor);
+    event AccessGranted(string indexed fileHash, address indexed doctor);
+    event AccessRevoked(string indexed fileHash, address indexed doctor);
 
-    function grantAccess(bytes32 _fileHash, address _doctor) external {
+    /**
+     * @notice Grant access to a doctor for a specific file
+     * @param _fileHash - IPFS hash of the file (string)
+     * @param _doctor - Address of doctor to be granted access
+     */
+    function grantAccess(string memory _fileHash, address _doctor) external {
+        require(bytes(_fileHash).length > 0, "Invalid file hash");
+        require(_doctor != address(0), "Invalid doctor address");
+
         fileAccess[_fileHash][_doctor] = true;
         emit AccessGranted(_fileHash, _doctor);
     }
 
-    function revokeAccess(bytes32 _fileHash, address _doctor) external {
+    /**
+     * @notice Revoke access for a doctor to a specific file
+     * @param _fileHash - IPFS hash (string)
+     * @param _doctor - Address of doctor whose access will be revoked
+     */
+    function revokeAccess(string memory _fileHash, address _doctor) external {
+        require(bytes(_fileHash).length > 0, "Invalid file hash");
+        require(_doctor != address(0), "Invalid doctor address");
+
         fileAccess[_fileHash][_doctor] = false;
         emit AccessRevoked(_fileHash, _doctor);
     }
 
-    function hasAccess(bytes32 _fileHash, address _user) external view returns (bool) {
+    /**
+     * @notice Check if a user has access to a specific file
+     * @param _fileHash - IPFS hash (string)
+     * @param _user - Address to check
+     * @return bool - True if user has access
+     */
+    function hasAccess(string memory _fileHash, address _user) external view returns (bool) {
+        require(bytes(_fileHash).length > 0, "Invalid file hash");
         return fileAccess[_fileHash][_user];
     }
 }

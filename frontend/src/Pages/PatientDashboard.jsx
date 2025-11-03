@@ -1,12 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { ethers } from "ethers";
+import { CONTRACTS } from "@/config/contracts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { User, Upload, FileText, Share2, Calendar, CheckCircle2, Clock } from "lucide-react";
+import { User, Upload, FileText, Share2, Calendar, CheckCircle2, Clock, X, Camera } from "lucide-react";
 
 export default function PatientDashboard() {
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState("profile");
+  const [patientDetails, setPatientDetails] = useState(null);
+  const [userAddress, setUserAddress] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [recordType, setRecordType] = useState("");
   const [uploadedFiles, setUploadedFiles] = useState([
     { id: 1, name: "Blood Test Report - Jan 2025", ipfsHash: "QmX47fKj...", date: "2025-01-15", status: "verified" },
     { id: 2, name: "MRI Scan Results", ipfsHash: "QmY83hLp...", date: "2025-01-10", status: "verified" },
@@ -15,35 +26,254 @@ export default function PatientDashboard() {
 
   const [doctorAddress, setDoctorAddress] = useState("");
   
+  // Create refs for file inputs
+  const fileInputRef = useRef(null);
+  const cameraInputRef = useRef(null);
+
+  useEffect(() => {
+    const verifyPatient = async () => {
+      try {
+        if (!window.ethereum) {
+          alert("Please install MetaMask!");
+          navigate("/");
+          return;
+        }
+
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
+        const userAddress = await signer.getAddress();
+
+        const contract = new ethers.Contract(
+          CONTRACTS.patient.address,
+          CONTRACTS.patient.abi,
+          signer
+        );
+
+        const patient = await contract.patients(userAddress);
+        setPatientDetails(patient);
+        setUserAddress(userAddress);
+
+        if (!patient.isRegistered) {
+          alert("Access denied! Please register as a patient first.");
+          navigate("/");
+        }
+      } catch (err) {
+        console.error("Wallet verification failed:", err);
+        alert("Could not verify your registration. Please reconnect your wallet.");
+        navigate("/");
+      }
+    };
+
+    verifyPatient();
+  }, [navigate]);
+
+  useEffect(() => {
+    async function fetchPatientFiles() {
+      try {
+        //setLoading(true);
+        const response = await axios.get(
+          `http://localhost:3000/api/ipfs/getpatientfiles/${userAddress}`
+        );
+        setUploadedFiles(response.data.files || []);
+        console.log("Fetched patient files:", response.data.files);
+      } catch (err) {
+        console.error("Error fetching patient files:", err);
+        //setError("Failed to load patient files.");
+      } 
+      // finally {
+      //   setLoading(false);
+      // }
+    }
+
+    if (userAddress) {
+      fetchPatientFiles();
+    }
+  }, [userAddress]);
+
   const patientInfo = {
-    name: "John Doe",
-    gender: "Male",
-    dob: "1990-05-15",
-    contact: "+1 (555) 123-4567",
-    walletAddress: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
+    name: patientDetails ? patientDetails.name : "Loading...",
+    gender: patientDetails ? patientDetails.gender : "Loading...",
+    dob: patientDetails ? patientDetails.dateOfBirth : "Loading...",
+    bloodGroup: patientDetails ? patientDetails.bloodGroup : "Loading...",
+    contact: patientDetails ? patientDetails.contactInfo : "Loading...",
+    Address: patientDetails ? patientDetails.homeAddress : "Loading...",
+    walletAddress: `${userAddress ? userAddress : "Loading..."}`
   };
 
-  const handleUpload = (e) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const mockHash = `Qm${Math.random().toString(36).substring(7)}...`;
+  // Handler for opening file dialog
+  const handleChooseFileClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  // Handler for opening camera
+  const handleCameraClick = () => {
+    cameraInputRef.current?.click();
+  };
+
+  const handleFileSelect = (file) => {
+    if (!file) return;
+    
+    // Validate file type
+    const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
+    if (!allowedTypes.includes(file.type)) {
+      alert("Please select a valid file type (PDF, JPG, JPEG, PNG)");
+      return;
+    }
+
+    // Validate file size (10MB max)
+    const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+    if (file.size > maxSize) {
+      alert("File size too large. Please select a file smaller than 10MB.");
+      return;
+    }
+
+    setSelectedFile(file);
+  };
+
+  const handleFileUpload = async (file) => {
+  try {
+    if (!recordType.trim()) {
+      alert("Please enter the record type (e.g., X-Ray, Prescription).");
+      return;
+    }
+
+    if (!file) {
+      alert("Please select a file to upload.");
+      return;
+    }
+
+    setUploading(true);
+    const formData = new FormData();
+    formData.append("file", file);
+
+    // Upload to IPFS first
+    const response = await fetch("http://localhost:3000/api/ipfs/patientfileupload", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`IPFS upload failed: ${errorText}`);
+    }
+
+    const data = await response.json();
+    const ipfsHash = data.hash;
+
+    if (!ipfsHash) {
+      throw new Error("No IPFS hash returned from server");
+    }
+
+    console.log("IPFS Hash received:", ipfsHash);
+
+    // Convert IPFS hash string to bytes32
+    //const ipfsHashBytes32 = ethers.encodeBytes32String(ipfsHash);
+    //console.log("Converted to bytes32:", ipfsHashBytes32);
+
+    // Push to blockchain
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      
+      const contract = new ethers.Contract(
+        CONTRACTS.medicalrecord.address,
+        CONTRACTS.medicalrecord.abi,
+        signer
+      );
+
+      // Estimate gas first
+      const gasEstimate = await contract.uploadRecord.estimateGas(
+        ipfsHash, 
+        recordType
+      );
+      console.log("Gas estimate:", gasEstimate.toString());
+
+      // Send the transaction
+      const tx = await contract.uploadRecord(
+        ipfsHash, 
+        recordType, 
+        {
+          gasLimit: gasEstimate.mul(110).div(100) // Add 10% buffer
+        }
+      );
+      
+      console.log("Transaction sent:", tx.hash);
+      
+      // Wait for confirmation
+      const receipt = await tx.wait();
+      console.log("Transaction confirmed:", receipt);
+
+      // Add to uploaded files list
       const newFile = {
         id: uploadedFiles.length + 1,
-        name: file.name,
-        ipfsHash: mockHash,
-        date: new Date().toISOString().split('T')[0],
-        status: "pending"
+        name: `${recordType} - ${file.name}`,
+        ipfsHash: `${ipfsHash.substring(0, 12)}...`,
+        fullHash: ipfsHash,
+        date: new Date().toISOString().split("T")[0],
+        status: "verified",
+        fileName: file.name,
+        txHash: tx.hash
       };
+
       setUploadedFiles([newFile, ...uploadedFiles]);
-      alert(`File uploaded successfully! IPFS Hash: ${mockHash}`);
+      alert(`File "${file.name}" uploaded successfully!\nTransaction: ${tx.hash}`);
+      
+    } catch (blockchainError) {
+      console.error("Blockchain error:", blockchainError);
+      
+      if (blockchainError.code === 'INVALID_ARGUMENT') {
+        throw new Error("Invalid parameters sent to contract. Please check your inputs.");
+      } else if (blockchainError.code === 'CALL_EXCEPTION') {
+        throw new Error("Contract call failed. Make sure you're connected to the right network and have the correct contract address.");
+      } else if (blockchainError.code === 'INSUFFICIENT_FUNDS') {
+        throw new Error("Insufficient funds for gas. Please add ETH to your wallet.");
+      } else if (blockchainError.message?.includes('user rejected')) {
+        throw new Error("Transaction was rejected by user.");
+      } else {
+        throw new Error(`Blockchain transaction failed: ${blockchainError.message}`);
+      }
     }
+
+    // Reset form
+    setRecordType("");
+    setSelectedFile(null);
+    
+    // Clear file inputs
+    if (fileInputRef.current) fileInputRef.current.value = '';
+    if (cameraInputRef.current) cameraInputRef.current.value = '';
+
+  } catch (err) {
+    console.error("Upload error:", err);
+    alert(`Upload failed: ${err.message}`);
+  } finally {
+    setUploading(false);
+  }
+};
+
+  const removeSelectedFile = () => {
+    setSelectedFile(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+    if (cameraInputRef.current) cameraInputRef.current.value = '';
   };
 
   const handleGrantAccess = () => {
-    if (doctorAddress) {
-      alert(`Access granted to doctor: ${doctorAddress}`);
-      setDoctorAddress("");
+    if (!doctorAddress) {
+      alert("Please enter a doctor's wallet address");
+      return;
     }
+
+    // Basic Ethereum address validation
+    if (!/^0x[a-fA-F0-9]{40}$/.test(doctorAddress)) {
+      alert("Please enter a valid Ethereum wallet address");
+      return;
+    }
+
+    alert(`Access granted to doctor: ${doctorAddress}`);
+    setDoctorAddress("");
+  };
+
+  const handleViewFile = (file) => {
+    alert(`File: ${file.name}\nIPFS Hash: ${file.fullHash || file.ipfsHash}\n\nIn a real application, this would fetch and display the file from IPFS.`);
   };
 
   return (
@@ -55,6 +285,7 @@ export default function PatientDashboard() {
         </div>
 
         <div className="grid lg:grid-cols-4 gap-6">
+          {/* Left Sidebar - Patient Profile */}
           <div className="lg:col-span-1">
             <Card className="border-none shadow-lg sticky top-8">
               <CardHeader className="border-b bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-t-lg">
@@ -82,8 +313,16 @@ export default function PatientDashboard() {
                     <p className="font-semibold text-gray-900">{patientInfo.dob}</p>
                   </div>
                   <div>
+                    <p className="text-sm text-gray-500 mb-1">Blood Group</p>
+                    <p className="font-semibold text-gray-900">{patientInfo.bloodGroup}</p>
+                  </div>
+                  <div>
                     <p className="text-sm text-gray-500 mb-1">Contact</p>
                     <p className="font-semibold text-gray-900">{patientInfo.contact}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500 mb-1">Address</p>
+                    <p className="font-semibold text-gray-900">{patientInfo.Address}</p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500 mb-1">Wallet Address</p>
@@ -96,8 +335,9 @@ export default function PatientDashboard() {
             </Card>
           </div>
 
+          {/* Main Content */}
           <div className="lg:col-span-3">
-            <Tabs defaultValue="profile" className="w-full">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <TabsList className="bg-white shadow-sm border mb-6">
                 <TabsTrigger value="profile" className="flex items-center gap-2">
                   <User className="w-4 h-4" />
@@ -137,8 +377,16 @@ export default function PatientDashboard() {
                         <Input type="date" value={patientInfo.dob} readOnly />
                       </div>
                       <div className="space-y-2">
+                        <Label>Blood Group</Label>
+                        <Input value={patientInfo.bloodGroup} readOnly />
+                      </div>
+                      <div className="space-y-2">
                         <Label>Contact Number</Label>
                         <Input value={patientInfo.contact} readOnly />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Address</Label>
+                        <Input value={patientInfo.Address} readOnly />
                       </div>
                     </div>
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
@@ -157,9 +405,50 @@ export default function PatientDashboard() {
                     <CardTitle>Upload Medical Records</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="border-2 border-dashed border-gray-300 rounded-xl p-12 text-center hover:border-blue-400 transition-colors">
-                      <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Upload className="w-10 h-10 text-blue-600" />
+                    {/* Record Type Input */}
+                    <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:gap-4">
+                      <Label htmlFor="record-type" className="mb-2 sm:mb-0 sm:w-32">
+                        Type of Record
+                      </Label>
+                      <Input
+                        id="record-type"
+                        placeholder="e.g., X-Ray, Blood Test, Prescription"
+                        value={recordType}
+                        onChange={(e) => setRecordType(e.target.value)}
+                        className="flex-1"
+                        disabled={uploading}
+                      />
+                    </div>
+
+                    {/* Selected File Preview */}
+                    {selectedFile && (
+                      <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <FileText className="w-8 h-8 text-blue-600" />
+                            <div>
+                              <p className="font-semibold text-gray-900">{selectedFile.name}</p>
+                              <p className="text-sm text-gray-600">
+                                {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
+                              </p>
+                            </div>
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={removeSelectedFile}
+                            disabled={uploading}
+                          >
+                            <X className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Upload Section */}
+                    <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 sm:p-12 text-center hover:border-blue-400 transition-colors">
+                      <div className="w-16 h-16 sm:w-20 sm:h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Upload className="w-8 h-8 sm:w-10 sm:h-10 text-blue-600" />
                       </div>
                       <h3 className="text-lg font-semibold text-gray-900 mb-2">
                         Upload Your Medical Documents
@@ -167,24 +456,83 @@ export default function PatientDashboard() {
                       <p className="text-gray-600 mb-6">
                         Files will be encrypted and stored on IPFS with blockchain verification
                       </p>
+
+                      {/* Upload options */}
+                      <div className="flex flex-col sm:flex-row justify-center gap-4 mb-4">
+                        {/* Choose File Button */}
+                        <Button
+                          className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto"
+                          onClick={handleChooseFileClick}
+                          disabled={uploading}
+                        >
+                          <Upload className="w-4 h-4 mr-2" />
+                          Choose File
+                        </Button>
+
+                        {/* Camera Button */}
+                        <Button
+                          className="bg-green-600 hover:bg-green-700 w-full sm:w-auto"
+                          onClick={handleCameraClick}
+                          disabled={uploading}
+                        >
+                          <Camera className="w-4 h-4 mr-2" />
+                          Capture from Camera
+                        </Button>
+
+                        {/* Upload Button - Only show when file is selected */}
+                        {selectedFile && (
+                          <Button
+                            onClick={() => handleFileUpload(selectedFile)}
+                            disabled={uploading || !recordType.trim()}
+                            className="w-full sm:w-auto bg-purple-600 hover:bg-purple-700"
+                          >
+                            {uploading ? (
+                              <>
+                                <Clock className="w-4 h-4 mr-2 animate-spin" />
+                                Uploading...
+                              </>
+                            ) : (
+                              <>
+                                <Upload className="w-4 h-4 mr-2" />
+                                Upload Now
+                              </>
+                            )}
+                          </Button>
+                        )}
+                      </div>
+
+                      {/* Hidden file inputs */}
                       <input
                         type="file"
-                        id="file-upload"
+                        ref={fileInputRef}
                         className="hidden"
-                        onChange={handleUpload}
                         accept=".pdf,.jpg,.jpeg,.png"
+                        onChange={(e) => handleFileSelect(e.target.files?.[0])}
                       />
-                      <Button
-                        onClick={() => document.getElementById('file-upload')?.click()}
-                        className="bg-blue-600 hover:bg-blue-700"
-                      >
-                        Choose File
-                      </Button>
+                      <input
+                        type="file"
+                        ref={cameraInputRef}
+                        className="hidden"
+                        accept="image/*"
+                        capture="environment"
+                        onChange={(e) => handleFileSelect(e.target.files?.[0])}
+                      />
+
+                      {uploading && (
+                        <div className="mt-4">
+                          <p className="text-blue-600">Uploading to IPFS and blockchain...</p>
+                          <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+                            <div className="bg-blue-600 h-2 rounded-full animate-pulse"></div>
+                          </div>
+                        </div>
+                      )}
+
                       <p className="text-sm text-gray-500 mt-4">
-                        Supported formats: PDF, JPG, PNG (Max 10MB)
+                        Supported formats: PDF, JPG, JPEG, PNG (Max 10MB)
                       </p>
                     </div>
 
+                    {/* Upload Info Section */}
                     <div className="mt-6 bg-gradient-to-br from-green-50 to-blue-50 border border-green-200 rounded-lg p-6">
                       <h4 className="font-semibold text-gray-900 mb-3">How Upload Works:</h4>
                       <ul className="space-y-2 text-sm text-gray-700">
@@ -216,46 +564,63 @@ export default function PatientDashboard() {
                     <CardTitle>My Medical Records</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-4">
-                      {uploadedFiles.map((file) => (
-                        <div
-                          key={file.id}
-                          className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
+                    {uploadedFiles.length === 0 ? (
+                      <div className="text-center py-12">
+                        <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                        <p className="text-gray-500">No medical records uploaded yet.</p>
+                        <Button 
+                          className="mt-4" 
+                          onClick={() => setActiveTab("upload")}
                         >
-                          <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                              <FileText className="w-6 h-6 text-blue-600" />
+                          Upload Your First Record
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        {uploadedFiles.map((file) => (
+                          <div
+                            key={file.id}
+                            className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
+                          >
+                            <div className="flex items-center gap-4">
+                              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                                <FileText className="w-6 h-6 text-blue-600" />
+                              </div>
+                              <div>
+                                <h4 className="font-semibold text-gray-900">{file.name}</h4>
+                                <p className="text-sm text-gray-500 flex items-center gap-2">
+                                  <Calendar className="w-4 h-4" />
+                                  {file.date}
+                                </p>
+                                <p className="text-xs text-gray-400 font-mono mt-1">
+                                  IPFS: {file.ipfsHash}
+                                </p>
+                              </div>
                             </div>
-                            <div>
-                              <h4 className="font-semibold text-gray-900">{file.name}</h4>
-                              <p className="text-sm text-gray-500 flex items-center gap-2">
-                                <Calendar className="w-4 h-4" />
-                                {file.date}
-                              </p>
-                              <p className="text-xs text-gray-400 font-mono mt-1">
-                                IPFS: {file.ipfsHash}
-                              </p>
+                            <div className="flex items-center gap-3">
+                              {file.status === "verified" ? (
+                                <span className="flex items-center gap-1 text-sm text-green-600 bg-green-50 px-3 py-1 rounded-full">
+                                  <CheckCircle2 className="w-4 h-4" />
+                                  Verified
+                                </span>
+                              ) : (
+                                <span className="flex items-center gap-1 text-sm text-yellow-600 bg-yellow-50 px-3 py-1 rounded-full">
+                                  <Clock className="w-4 h-4" />
+                                  Pending
+                                </span>
+                              )}
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => handleViewFile(file)}
+                              >
+                                View
+                              </Button>
                             </div>
                           </div>
-                          <div className="flex items-center gap-3">
-                            {file.status === "verified" ? (
-                              <span className="flex items-center gap-1 text-sm text-green-600 bg-green-50 px-3 py-1 rounded-full">
-                                <CheckCircle2 className="w-4 h-4" />
-                                Verified
-                              </span>
-                            ) : (
-                              <span className="flex items-center gap-1 text-sm text-yellow-600 bg-yellow-50 px-3 py-1 rounded-full">
-                                <Clock className="w-4 h-4" />
-                                Pending
-                              </span>
-                            )}
-                            <Button variant="outline" size="sm">
-                              View
-                            </Button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                        ))}
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               </TabsContent>
@@ -279,6 +644,7 @@ export default function PatientDashboard() {
                       <Button
                         onClick={handleGrantAccess}
                         className="w-full bg-green-600 hover:bg-green-700"
+                        disabled={!doctorAddress}
                       >
                         <Share2 className="w-4 h-4 mr-2" />
                         Grant Access

@@ -2,15 +2,25 @@ import React, { useState } from "react";
 import Navbar from "./Navbar";
 import AuthModal from "./AuthModal";
 import Footer from "./Footer";
+import { registerPatient } from "@/utils/registerPatient.js";
 
 export default function Layout({ children }) {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [activeForm, setActiveForm] = useState(null);
   const [formData, setFormData] = useState({});
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", activeForm, formData);
+    console.log("Hello:",activeForm);
+    //console.log("Form submitted:", activeForm, formData);
+    if(formData.mode === "patient"){
+      try {
+        await registerPatient(formData);
+        alert("Patient registered successfully!");
+      } catch (err) {
+        console.error(err);
+      }
+    }
     setAuthModalOpen(false);
     setActiveForm(null);
     setFormData({});

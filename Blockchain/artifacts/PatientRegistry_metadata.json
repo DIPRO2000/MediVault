@@ -16,9 +16,9 @@
 					},
 					{
 						"indexed": false,
-						"internalType": "bytes32",
+						"internalType": "string",
 						"name": "fileHash",
-						"type": "bytes32"
+						"type": "string"
 					}
 				],
 				"name": "FileAdded",
@@ -46,9 +46,14 @@
 			{
 				"inputs": [
 					{
-						"internalType": "bytes32",
+						"internalType": "address",
+						"name": "_patient",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
 						"name": "_fileHash",
-						"type": "bytes32"
+						"type": "string"
 					}
 				],
 				"name": "addFileToPatient",
@@ -68,22 +73,32 @@
 				"outputs": [
 					{
 						"internalType": "string",
-						"name": "",
+						"name": "name",
 						"type": "string"
 					},
 					{
 						"internalType": "string",
-						"name": "",
+						"name": "gender",
 						"type": "string"
 					},
 					{
 						"internalType": "string",
-						"name": "",
+						"name": "dateOfBirth",
 						"type": "string"
 					},
 					{
 						"internalType": "string",
-						"name": "",
+						"name": "bloodGroup",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "contactInfo",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "homeAddress",
 						"type": "string"
 					}
 				],
@@ -101,9 +116,9 @@
 				"name": "getPatientFiles",
 				"outputs": [
 					{
-						"internalType": "bytes32[]",
+						"internalType": "string[]",
 						"name": "",
-						"type": "bytes32[]"
+						"type": "string[]"
 					}
 				],
 				"stateMutability": "view",
@@ -136,7 +151,17 @@
 					},
 					{
 						"internalType": "string",
+						"name": "bloodGroup",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
 						"name": "contactInfo",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "homeAddress",
 						"type": "string"
 					},
 					{
@@ -167,7 +192,17 @@
 					},
 					{
 						"internalType": "string",
+						"name": "_bloodGroup",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
 						"name": "_contactInfo",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_homeAddress",
 						"type": "string"
 					}
 				],
@@ -192,7 +227,7 @@
 		"compilationTarget": {
 			"contracts/PatientRegistry.sol": "PatientRegistry"
 		},
-		"evmVersion": "prague",
+		"evmVersion": "paris",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
@@ -205,11 +240,11 @@
 	},
 	"sources": {
 		"contracts/PatientRegistry.sol": {
-			"keccak256": "0x3b81d995e430e1d57844fdfef6309eba15f558c0009a6608103b70f8a274e4a7",
+			"keccak256": "0xee96f1326c2a2cdd8b99ceefce56f3e02d53deeed4ae57381f9e997390cf0535",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://881a8abfab7fca9fa42d045c3526485983201004a90afaea521a7a0ab3eb669d",
-				"dweb:/ipfs/QmeBKANWBMhjauXsyNUcjt87vEBYvtCMgbCutcbdNeehAJ"
+				"bzz-raw://372a380ea40647a914f54d96824aab3814478a2722ae522e854e0f1ce8a306dd",
+				"dweb:/ipfs/QmQKj2hkK4ZVCoWAK7nGfksdWF1LXZu4dyaaW2sfGPnxhw"
 			]
 		}
 	},
