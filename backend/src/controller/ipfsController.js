@@ -177,3 +177,149 @@ export const getDoctorsWithFileAccess = async (req, res) => {
         });
     }
 }
+
+
+
+export const getPatientFilesAccessStats = async (req, res) => {
+    try {
+        const { patientAddress } = req.params;
+
+        if (!patientAddress || !ethers.isAddress(patientAddress)) {
+            return res.status(400).json({
+                success: false,
+                error: "Valid patient address is required"
+            });
+        }
+
+        console.log(`Fetching files and access stats for patient: ${patientAddress}`);
+
+        // 1. Initialize contracts
+        const medicalRecordContract = new ethers.Contract(
+            CONTRACTS.medicalrecord.address,
+            CONTRACTS.medicalrecord.abi,
+            provider
+        );
+
+        const accessControlContract = new ethers.Contract(
+            CONTRACTS.accesscontrol.address,
+            CONTRACTS.accesscontrol.abi,
+            provider
+        );
+
+        // 2. Get all file hashes for the patient using MedicalRecord contract
+        const patientFileHashes = await medicalRecordContract.getPatientFiles(patientAddress);
+        
+        if (!patientFileHashes || patientFileHashes.length === 0) {
+            return res.json({
+                success: true,
+                patientAddress: patientAddress,
+                files: [],
+                totalFiles: 0,
+                message: "No files found for this patient"
+            });
+        }
+
+        console.log(`Found ${patientFileHashes.length} files for patient ${patientAddress}`);
+
+        // 3. For each file, get access information and file details
+        const fileAccessPromises = patientFileHashes.map(async (fileHash) => {
+            try {
+                // Get file details from MedicalRecord contract using getRecordDetails
+                const record = await medicalRecordContract.getRecordDetails(fileHash);
+                
+                console.log(`Record details for ${fileHash}:`, {
+                    fileHash: record.fileHash,
+                    fileType: record.fileType,
+                    owner: record.owner,
+                    uploadTime: record.uploadTime.toString()
+                });
+
+                // Safely handle timestamp
+                let uploadDate = "Unknown";
+                const uploadTime = record.uploadTime.toString();
+                
+                if (uploadTime && uploadTime !== "0" && !isNaN(Number(uploadTime)) && Number(uploadTime) > 0) {
+                    uploadDate = new Date(Number(uploadTime) * 1000).toISOString();
+                }
+
+                // Get doctors with access to this file
+                let doctorsWithAccess = [];
+                try {
+                    doctorsWithAccess = await accessControlContract.getDoctorsForFile(fileHash);
+                    // Filter out zero addresses
+                    doctorsWithAccess = doctorsWithAccess.filter(addr => 
+                        addr !== ethers.ZeroAddress && addr !== "0x0000000000000000000000000000000000000000"
+                    );
+                    console.log(`Doctors with access to ${fileHash}:`, doctorsWithAccess);
+                } catch (accessError) {
+                    console.warn(`Could not fetch access data for file ${fileHash}:`, accessError.message);
+                }
+
+                return {
+                    fileHash: fileHash,
+                    recordType: record.fileType,
+                    timestamp: uploadTime,
+                    uploadDate: uploadDate,
+                    owner: record.owner,
+                    doctorsWithAccess: doctorsWithAccess,
+                    accessCount: doctorsWithAccess.length,
+                    isActive: record.owner !== ethers.ZeroAddress
+                };
+            } catch (error) {
+                console.error(`Error processing file ${fileHash}:`, error.message);
+                return {
+                    fileHash: fileHash,
+                    error: `Failed to process file: ${error.message}`,
+                    doctorsWithAccess: [],
+                    accessCount: 0,
+                    isActive: false
+                };
+            }
+        });
+
+        // 4. Wait for all file access data to be processed
+        const filesWithAccess = await Promise.all(fileAccessPromises);
+
+        // 5. Calculate statistics
+        const successfulFiles = filesWithAccess.filter(file => !file.error);
+        const failedFiles = filesWithAccess.filter(file => file.error);
+        const totalAccessGrants = successfulFiles.reduce((sum, file) => sum + file.accessCount, 0);
+        const filesWithAccessCount = successfulFiles.filter(file => file.accessCount > 0).length;
+
+        console.log(`Processed ${successfulFiles.length} files successfully, ${failedFiles.length} failed`);
+
+        // 6. Respond with comprehensive data
+        res.json({
+            success: true,
+            patientAddress: patientAddress,
+            files: filesWithAccess,
+            statistics: {
+                totalFiles: patientFileHashes.length,
+                successfulFiles: successfulFiles.length,
+                failedFiles: failedFiles.length,
+                filesWithAccess: filesWithAccessCount,
+                filesWithoutAccess: successfulFiles.length - filesWithAccessCount,
+                totalAccessGrants: totalAccessGrants,
+                averageAccessPerFile: successfulFiles.length > 0 ? (totalAccessGrants / successfulFiles.length).toFixed(2) : 0
+            },
+            message: `Retrieved access information for ${successfulFiles.length} out of ${patientFileHashes.length} files`
+        });
+
+    } catch (error) {
+        console.error("Error fetching patient files access stats:", error.message);
+        
+        if (error.message.includes("Patient not registered")) {
+            return res.status(404).json({
+                success: false,
+                error: "Patient not found or not registered",
+                details: error.message
+            });
+        }
+
+        res.status(500).json({
+            success: false,
+            error: "Failed to fetch patient files access statistics",
+            details: error.message
+        });
+    }
+};

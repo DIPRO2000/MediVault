@@ -207,3 +207,234 @@ export const getAllDoctorsMetadataFromIPFS = async (req, res) => {
         });
     }
 }
+
+
+// Get all medical files accessible by a specific doctor
+export const getDoctorAccessibleFiles = async (req, res) => {
+    try {
+        const { doctorAddress } = req.params;
+
+        // Validate doctor address
+        if (!doctorAddress || !ethers.isAddress(doctorAddress)) {
+            return res.status(400).json({
+                success: false,
+                error: "Valid doctor address is required"
+            });
+        }
+
+        
+        // 1. Get AccessControl contract instance
+        const accessControlContract = new ethers.Contract(
+            CONTRACTS.accesscontrol.address,
+            CONTRACTS.accesscontrol.abi,
+            provider
+        );
+
+        // 2. Get MedicalRecord contract instance
+        const medicalRecordContract = new ethers.Contract(
+            CONTRACTS.medicalrecord.address,
+            CONTRACTS.medicalrecord.abi,
+            provider
+        );
+
+        console.log(`Fetching accessible files for doctor: ${doctorAddress}`);
+
+        // 3. Get all file hashes accessible by the doctor
+        const accessibleFileHashes = await accessControlContract.getFilesForDoctor(doctorAddress);
+        
+        console.log(`Found ${accessibleFileHashes.length} accessible files for doctor ${doctorAddress}`);
+
+        if (accessibleFileHashes.length === 0) {
+            return res.json({
+                success: true,
+                doctorAddress: doctorAddress,
+                accessibleFiles: [],
+                totalFiles: 0,
+                message: "No files accessible for this doctor"
+            });
+        }
+
+        // 4. Fetch detailed record information for each accessible file
+        const fileDetailsPromises = accessibleFileHashes.map(async (fileHash) => {
+            try {
+                // Get record details from MedicalRecord contract
+                const record = await medicalRecordContract.viewRecord(fileHash, doctorAddress);
+                
+                console.log(`Fetched record for hash ${fileHash}:`, record);
+
+                return {
+                    fileHash: fileHash,
+                    recordType: record.recordType,
+                    owner: record.owner,
+                    timestamp: record.timestamp.toString(),
+                    isOwner: record.owner === doctorAddress,
+                    accessGrantedBy: record.owner // The patient who granted access
+                };
+            } catch (error) {
+                console.error(`Error fetching details for file ${fileHash}:`, error.message);
+                return {
+                    fileHash: fileHash,
+                    error: `Failed to fetch record details: ${error.message}`,
+                    accessible: false
+                };
+            }
+        });
+
+        // 5. Wait for all record details to be fetched
+        const fileDetails = await Promise.all(fileDetailsPromises);
+
+        // 6. Filter out failed fetches and count successful ones
+        const successfulFiles = fileDetails.filter(file => !file.error);
+        const failedFiles = fileDetails.filter(file => file.error);
+
+        console.log(`Successfully fetched ${successfulFiles.length} files, ${failedFiles.length} failed`);
+
+        // 7. Respond with the compiled data
+        res.json({
+            success: true,
+            doctorAddress: doctorAddress,
+            accessibleFiles: successfulFiles,
+            failedFiles: failedFiles,
+            totalFiles: accessibleFileHashes.length,
+            successfulFiles: successfulFiles.length,
+            failedFiles: failedFiles.length,
+            message: `Retrieved ${successfulFiles.length} out of ${accessibleFileHashes.length} accessible files`
+        });
+
+    } catch (error) {
+        console.error("Error fetching doctor accessible files:", error.message);
+        
+        // Handle specific error cases
+        if (error.message.includes("Access denied")) {
+            return res.status(403).json({
+                success: false,
+                error: "Access denied to medical records",
+                details: error.message
+            });
+        } else if (error.message.includes("Record does not exist")) {
+            return res.status(404).json({
+                success: false,
+                error: "One or more records not found",
+                details: error.message
+            });
+        }
+
+        res.status(500).json({
+            success: false,
+            error: "Failed to fetch doctor accessible files",
+            details: error.message
+        });
+    }
+};
+
+// Optional: Get accessible files with patient information
+export const getDoctorAccessibleFilesWithPatientInfo = async (req, res) => {
+    try {
+        const { doctorAddress } = req.params;
+
+        // Validate doctor address
+        if (!doctorAddress || !ethers.isAddress(doctorAddress)) {
+            return res.status(400).json({
+                success: false,
+                error: "Valid doctor address is required"
+            });
+        }
+        
+        // Get contracts
+        const accessControlContract = new ethers.Contract(
+            CONTRACTS.accesscontrol.address,
+            CONTRACTS.accesscontrol.abi,
+            provider
+        );
+
+        const medicalRecordContract = new ethers.Contract(
+            CONTRACTS.medicalrecord.address,
+            CONTRACTS.medicalrecord.abi,
+            provider
+        );
+
+        const patientContract = new ethers.Contract(
+            CONTRACTS.patient.address,
+            CONTRACTS.patient.abi,
+            provider
+        );
+
+        console.log(`Fetching accessible files with patient info for doctor: ${doctorAddress}`);
+
+        // Get accessible file hashes
+        const accessibleFileHashes = await accessControlContract.getFilesForDoctor(doctorAddress);
+        
+        if (accessibleFileHashes.length === 0) {
+            return res.json({
+                success: true,
+                doctorAddress: doctorAddress,
+                accessibleFiles: [],
+                totalFiles: 0,
+                message: "No files accessible for this doctor"
+            });
+        }
+
+        // Fetch detailed information including patient data
+        const fileDetailsPromises = accessibleFileHashes.map(async (fileHash) => {
+            try {
+                // Get record details
+                const record = await medicalRecordContract.viewRecord(fileHash, doctorAddress);
+                
+                // Get patient information
+                let patientInfo = null;
+                try {
+                    const patientData = await patientContract.patients(record.owner);
+                    patientInfo = {
+                        name: patientData.name,
+                        walletAddress: record.owner,
+                        contactInfo: patientData.contactInfo,
+                        bloodGroup: patientData.bloodGroup
+                    };
+                } catch (patientError) {
+                    console.warn(`Could not fetch patient info for ${record.owner}:`, patientError.message);
+                    patientInfo = {
+                        walletAddress: record.owner,
+                        name: "Unknown Patient"
+                    };
+                }
+
+                return {
+                    fileHash: fileHash,
+                    recordType: record.recordType,
+                    timestamp: record.timestamp.toString(),
+                    uploadDate: new Date(Number(record.timestamp) * 1000).toISOString(),
+                    patient: patientInfo,
+                    accessGrantedBy: record.owner,
+                    isOwner: record.owner === doctorAddress
+                };
+            } catch (error) {
+                console.error(`Error fetching details for file ${fileHash}:`, error.message);
+                return {
+                    fileHash: fileHash,
+                    error: `Failed to fetch record details: ${error.message}`,
+                    accessible: false
+                };
+            }
+        });
+
+        const fileDetails = await Promise.all(fileDetailsPromises);
+        const successfulFiles = fileDetails.filter(file => !file.error);
+
+        res.json({
+            success: true,
+            doctorAddress: doctorAddress,
+            accessibleFiles: successfulFiles,
+            totalFiles: accessibleFileHashes.length,
+            successfulFiles: successfulFiles.length,
+            message: `Retrieved ${successfulFiles.length} accessible files with patient information`
+        });
+
+    } catch (error) {
+        console.error("Error fetching doctor accessible files with patient info:", error.message);
+        res.status(500).json({
+            success: false,
+            error: "Failed to fetch doctor accessible files",
+            details: error.message
+        });
+    }
+};
