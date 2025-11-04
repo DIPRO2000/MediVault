@@ -3,7 +3,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 //Routes would be imported here in future
-import ipfsRoutes from "./src/routes/ipfsRoutes.js";  
+import ipfsRoutes from "./src/routes/ipfsRoutes.js";
+import doctorRoutes from "./src/routes/doctorRoutes.js";  
 
 // Load environment variables
 dotenv.config();
@@ -11,13 +12,14 @@ dotenv.config();
 
 const app = express();
 
-
+ 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
 //Routes
 app.use("/api/ipfs", ipfsRoutes);
+app.use("/api/doctor", doctorRoutes);
 
 // Test route
 app.get("/", (req, res) => {

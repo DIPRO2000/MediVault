@@ -11,10 +11,10 @@ export const CONTRACTS = {
     address: `${import.meta.env.VITE_PATIENT_REGISTRY_ADDRESS}`, // replace after deploy
     abi: PatientRegistry.abi,
   },
-//   doctor: {
-//     address: "0x0000000000000000000000000000000000000000",
-//     abi: require("../abis/DoctorRegistry.json"),
-//   },
+  doctor: {
+    address: `${import.meta.env.VITE_DOCTOR_REGISTRY_ADDRESS}`,
+    abi: DoctorRegistry.abi,
+  },
   accesscontrol: {
     address: `${import.meta.env.VITE_ACCESS_CONTROL_ADDRESS}`,
     abi: AccessControl.abi,

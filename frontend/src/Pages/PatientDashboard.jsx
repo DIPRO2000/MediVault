@@ -21,6 +21,9 @@ export default function PatientDashboard() {
   const [uploadedFiles, setUploadedFiles] = useState([]);
 
   const [doctorAddress, setDoctorAddress] = useState("");
+
+  const [selectedFileHash, setSelectedFileHash] = useState("");
+  const [sharedAccess, setSharedAccess] = useState({});
   
   // Create refs for file inputs
   const fileInputRef = useRef(null);
@@ -63,28 +66,28 @@ export default function PatientDashboard() {
     verifyPatient();
   }, [navigate]);
 
-  useEffect(() => {
-    async function fetchPatientFiles() {
-      try {
-        //setLoading(true);
-        const response = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/api/ipfs/getpatientfiles/${userAddress}`
-        );
-        setUploadedFiles(response.data.fileRecords || []);
-        //console.log("Fetched patient files:", response.data.fileRecords);
-      } catch (err) {
-        console.error("Error fetching patient files:", err);
-        //setError("Failed to load patient files.");
-      } 
-      // finally {
-      //   setLoading(false);
-      // }
+  // In your fetchPatientFiles function, you might want to also fetch shared access data
+useEffect(() => {
+  async function fetchPatientFiles() {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/ipfs/getpatientfiles/${userAddress}`
+      );
+      // Add empty sharedWith array if not present
+      const filesWithShared = response.data.fileRecords?.map(file => ({
+        ...file,
+        sharedWith: file.sharedWith || []
+      })) || [];
+      setUploadedFiles(filesWithShared);
+    } catch (err) {
+      console.error("Error fetching patient files:", err);
     }
+  }
 
-    if (userAddress) {
-      fetchPatientFiles();
-    }
-  }, [userAddress,activeTab]);
+  if (userAddress) {
+    fetchPatientFiles();
+  }
+}, [userAddress, activeTab]);
 
   const patientInfo = {
     name: patientDetails ? patientDetails.name : "Loading...",
@@ -176,6 +179,16 @@ export default function PatientDashboard() {
       const patientInfo = await patientContract.patients(userAddress);
       if (!patientInfo.isRegistered) {
         throw new Error("You need to register as a patient first before uploading files.");
+      }
+      //console.log("Check:",patientInfo);
+
+      //Check if file is already uploaded or not
+      const fileHashes = await patientContract.getPatientFiles(userAddress); 
+      //console.log("Existing file hashes:", fileHashes);
+      const alreadyUploaded = fileHashes.includes(ipfsHash);
+      if (alreadyUploaded) {
+        //alert("This file has already been uploaded.");
+        throw new Error("This file has already been uploaded.");
       }
 
       // Push to blockchain
@@ -271,9 +284,9 @@ export default function PatientDashboard() {
     if (cameraInputRef.current) cameraInputRef.current.value = '';
   };
 
-  const handleGrantAccess = () => {
-    if (!doctorAddress) {
-      alert("Please enter a doctor's wallet address");
+  const handleGrantAccess = async () => {
+    if (!doctorAddress || !selectedFileHash) {
+      alert("Please select a file and enter doctor's address");
       return;
     }
 
@@ -283,12 +296,88 @@ export default function PatientDashboard() {
       return;
     }
 
-    alert(`Access granted to doctor: ${doctorAddress}`);
-    setDoctorAddress("");
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      
+      const medicalRecordContract = new ethers.Contract(
+        CONTRACTS.medicalrecord.address,
+        CONTRACTS.medicalrecord.abi,
+        signer
+      );
+
+      // Call the grantAccess function from your contract
+      const tx = await medicalRecordContract.grantAccess(selectedFileHash, doctorAddress);
+      
+      console.log("Grant access transaction sent:", tx.hash);
+      
+      // Wait for confirmation
+      await tx.wait();
+      
+      // Update local state
+      setSharedAccess(prev => ({
+        ...prev,
+        [selectedFileHash]: [...(prev[selectedFileHash] || []), doctorAddress]
+      }));
+
+      // Update the uploadedFiles array to include sharedWith information
+      setUploadedFiles(prevFiles => 
+        prevFiles.map(file => 
+          (file.fileHash === selectedFileHash || file.ipfsHash === selectedFileHash) 
+            ? {
+                ...file,
+                sharedWith: [...(file.sharedWith || []), doctorAddress]
+              }
+            : file
+        )
+      );
+
+      alert(`✅ Access granted to doctor: ${doctorAddress}`);
+      setDoctorAddress("");
+      
+    } catch (err) {
+      console.error("Error granting access:", err);
+      alert(`❌ Failed to grant access: ${err.message}`);
+    }
+  };
+
+  const handleRevokeAccess = async (fileHash, doctorAddress) => {
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      
+      const medicalRecordContract = new ethers.Contract(
+        CONTRACTS.medicalrecord.address,
+        CONTRACTS.medicalrecord.abi,
+        signer
+      );
+
+      // Assuming you have a revokeAccess function in your contract
+      const tx = await medicalRecordContract.revokeAccess(fileHash, doctorAddress);
+      await tx.wait();
+
+      // Update local state
+      setUploadedFiles(prevFiles => 
+        prevFiles.map(file => 
+          (file.fileHash === fileHash || file.ipfsHash === fileHash) 
+            ? {
+                ...file,
+                sharedWith: file.sharedWith?.filter(addr => addr !== doctorAddress) || []
+              }
+            : file
+        )
+      );
+
+      alert(`✅ Access revoked for doctor: ${doctorAddress}`);
+      
+    } catch (err) {
+      console.error("Error revoking access:", err);
+      alert(`❌ Failed to revoke access: ${err.message}`);
+    }
   };
 
   const handleViewFile = (file) => {
-    alert(`File: ${file.name}\nIPFS Hash: ${file.fullHash || file.ipfsHash}\n\nIn a real application, this would fetch and display the file from IPFS.`);
+    alert(`File: ${file.name}\nIPFS Hash: ${file.fileHash || file.ipfsHash}\n\nIn a real application, this would fetch and display the file from IPFS.`);
   };
 
   return (
@@ -647,7 +736,24 @@ export default function PatientDashboard() {
                     <CardTitle>Share Access with Doctors</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
+                    {/* File Selection */}
                     <div className="space-y-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="file-select">Select File to Share</Label>
+                        <select
+                          id="file-select"
+                          className="w-full p-2 border border-gray-300 rounded-md"
+                          onChange={(e) => setSelectedFileHash(e.target.value)}
+                        >
+                          <option value="">Choose a file...</option>
+                          {uploadedFiles.map((file) => (
+                            <option key={file.fileHash} value={file.fileHash}>
+                              {file.fileType} - {file.fileHash }
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
                       <div className="space-y-2">
                         <Label htmlFor="doctor-address">Doctor's Wallet Address</Label>
                         <Input
@@ -657,38 +763,69 @@ export default function PatientDashboard() {
                           onChange={(e) => setDoctorAddress(e.target.value)}
                         />
                       </div>
+
                       <Button
                         onClick={handleGrantAccess}
                         className="w-full bg-green-600 hover:bg-green-700"
-                        disabled={!doctorAddress}
+                        disabled={!doctorAddress || !selectedFileHash}
                       >
                         <Share2 className="w-4 h-4 mr-2" />
                         Grant Access
                       </Button>
                     </div>
 
+                    {/* Currently Shared Access */}
                     <div className="bg-gray-50 rounded-lg p-6">
-                      <h4 className="font-semibold text-gray-900 mb-4">Currently Shared With:</h4>
-                      <div className="space-y-3">
-                        <div className="flex items-center justify-between p-3 bg-white border rounded-lg">
-                          <div>
-                            <p className="font-medium text-gray-900">Dr. Sarah Johnson</p>
-                            <p className="text-sm text-gray-500 font-mono">0x742d35Cc...5f0bEb</p>
-                          </div>
-                          <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700">
-                            Revoke
-                          </Button>
+                      <h4 className="font-semibold text-gray-900 mb-4">Access Management</h4>
+                      {uploadedFiles.length === 0 ? (
+                        <p className="text-gray-500 text-center py-4">No files available to manage access.</p>
+                      ) : (
+                        <div className="space-y-4">
+                          {uploadedFiles.map((file) => (
+                            <div key={file.fileHash} className="p-4 bg-white border rounded-lg">
+                              <div className="flex items-center justify-between mb-3">
+                                <div>
+                                  <p className="font-medium text-gray-900">{file.fileType}</p>
+                                  <p className="text-sm text-gray-500 font-mono">
+                                    {file.fileHash ? `${file.fileHash.substring(0, 16)}...` : file.ipfsHash}
+                                  </p>
+                                </div>
+                                <Button 
+                                  variant="outline" 
+                                  size="sm"
+                                  onClick={() => setSelectedFileHash(file.fileHash || file.ipfsHash)}
+                                >
+                                  Select
+                                </Button>
+                              </div>
+                              
+                              {/* Shared Doctors List for this file */}
+                              <div className="mt-3 pt-3 border-t">
+                                <p className="text-sm font-medium text-gray-700 mb-2">Shared with:</p>
+                                {file.sharedWith && file.sharedWith.length > 0 ? (
+                                  <div className="space-y-2">
+                                    {file.sharedWith.map((doctor, index) => (
+                                      <div key={index} className="flex items-center justify-between text-sm">
+                                        <span className="font-mono text-gray-600">{doctor}</span>
+                                        <Button 
+                                          variant="ghost" 
+                                          size="sm" 
+                                          className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                                          onClick={() => handleRevokeAccess(file.fileHash || file.ipfsHash, doctor)}
+                                        >
+                                          Revoke
+                                        </Button>
+                                      </div>
+                                    ))}
+                                  </div>
+                                ) : (
+                                  <p className="text-sm text-gray-500">Not shared with any doctors</p>
+                                )}
+                              </div>
+                            </div>
+                          ))}
                         </div>
-                        <div className="flex items-center justify-between p-3 bg-white border rounded-lg">
-                          <div>
-                            <p className="font-medium text-gray-900">Dr. Michael Chen</p>
-                            <p className="text-sm text-gray-500 font-mono">0x8f3b21Aa...3c7dEf</p>
-                          </div>
-                          <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700">
-                            Revoke
-                          </Button>
-                        </div>
-                      </div>
+                      )}
                     </div>
                   </CardContent>
                 </Card>

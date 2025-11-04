@@ -2,18 +2,25 @@
 pragma solidity ^0.8.20;
 
 contract PatientRegistry {
+    //State variables to track counts
+    uint256 public totalPatients;
+    uint256 public totalFileRecords;
+
     struct Patient {
-        string name;            // Patient’s full name
-        string gender;          // "Male", "Female", "Other"
-        string dateOfBirth;     // DOB (YYYY-MM-DD)
-        string bloodGroup;      // e.g. "A+", "B-", etc.
-        string contactInfo;     // Email or phone
-        string homeAddress;     // Full residential address
-        bool isRegistered;      // Tracks if account exists
-        string[] fileHashes;   // Uploaded record identifiers (keccak of IPFS CID)
+        string name;
+        string gender;
+        string dateOfBirth;
+        string bloodGroup;
+        string contactInfo;
+        string homeAddress;
+        bool isRegistered;
+        string[] fileHashes;
     }
 
     mapping(address => Patient) public patients;
+    
+    // Array to store all registered patient addresses for iteration
+    address[] public registeredPatientAddresses;
 
     event PatientRegistered(address indexed patient, string name);
     event FileAdded(address indexed patient, string fileHash);
@@ -41,13 +48,21 @@ contract PatientRegistry {
         p.contactInfo = _contactInfo;
         p.homeAddress = _homeAddress;
         p.isRegistered = true;
+        
+        //Update total counts and array on registration
+        totalPatients++; // Increment total patient count
+        registeredPatientAddresses.push(msg.sender); // Add address to iterable list
 
         emit PatientRegistered(msg.sender, _name);
     }
 
-    function addFileToPatient(address _patient,string memory _fileHash) public  {
+    function addFileToPatient(address _patient, string memory _fileHash) public {
         require(patients[_patient].isRegistered, "Not registered");
         patients[_patient].fileHashes.push(_fileHash);
+        
+        // Update total records count on file addition
+        totalFileRecords++; 
+
         emit FileAdded(_patient, _fileHash);
     }
 
@@ -71,8 +86,17 @@ contract PatientRegistry {
         return (p.name, p.gender, p.dateOfBirth, p.bloodGroup, p.contactInfo, p.homeAddress);
     }
 
-    // function test() public view returns(bool)
-    // {
-    //     return patients[msg.sender].isRegistered;
-    // }
+    // Getter functions for total counts
+    
+    function getTotalPatientsCount() public view returns (uint256) {
+        return totalPatients;
+    }
+
+    function getTotalRecordsCount() public view returns (uint256) {
+        return totalFileRecords;
+    }
+    
+    function getAllRegisteredPatients() public view returns (address[] memory) {
+        return registeredPatientAddresses;
+    }
 }

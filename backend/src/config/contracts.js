@@ -18,14 +18,14 @@ export const CONTRACTS = {
     address: `${process.env.PATIENT_REGISTRY_ADDRESS}`, // replace after deploy
     abi: PatientRegistry.abi,
   },
-//   doctor: {
-//     address: "0x0000000000000000000000000000000000000000",
-//     abi: require("../abis/DoctorRegistry.json"),
-//   },
-//   accesscontrol: {
-//     address: "0x0000000000000000000000000000000000000000",
-//     abi: require("../abis/AdminRegistry.json"),
-//   },
+  doctor: {
+    address: `${process.env.DOCTOR_REGISTRY_ADDRESS}`, // replace after deploy
+    abi: DoctorRegistry.abi,
+  },
+  accesscontrol: {
+    address: `${process.env.ACCESS_CONTROL_ADDRESS}`, // replace after deploy
+    abi: AccessControl.abi,
+  },
   medicalrecord: {
     address: `${process.env.MEDICAL_RECORD_ADDRESS}`,
     abi: MedicalRecord.abi,

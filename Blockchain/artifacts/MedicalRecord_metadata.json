@@ -181,6 +181,11 @@
 						"internalType": "string",
 						"name": "_fileHash",
 						"type": "string"
+					},
+					{
+						"internalType": "address",
+						"name": "_user",
+						"type": "address"
 					}
 				],
 				"name": "viewRecord",
@@ -231,7 +236,7 @@
 						"_fileType": "- Type of file (e.g., \"X-ray\", \"Prescription\")"
 					}
 				},
-				"viewRecord(string)": {
+				"viewRecord(string,address)": {
 					"params": {
 						"_fileHash": "- IPFS file hash (string)"
 					}
@@ -251,7 +256,7 @@
 				"uploadRecord(string,string)": {
 					"notice": "Upload a new medical record (IPFS hash in string form)"
 				},
-				"viewRecord(string)": {
+				"viewRecord(string,address)": {
 					"notice": "View record details if access is granted or caller is owner"
 				}
 			},
@@ -262,7 +267,7 @@
 		"compilationTarget": {
 			"contracts/MedicalRecord.sol": "MedicalRecord"
 		},
-		"evmVersion": "prague",
+		"evmVersion": "paris",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
@@ -275,27 +280,27 @@
 	},
 	"sources": {
 		"contracts/AccessControl.sol": {
-			"keccak256": "0x323287aca64c7f305a27a3a9dbc222eb0dce1031d154670b06119dc820a4364e",
+			"keccak256": "0xcd846a6ad68855a022fa38b9fef4fbead71529c29c3be38cc9bfcca16ec8ade1",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://4cfbfb866b698e7ffe51e3a0653ba2a4b848ef029335f45d8ed08b1442700625",
-				"dweb:/ipfs/QmRPQxzLWu2oHoLTTtsWvrwA6hqYnM5LvcyngV93bgqHg1"
+				"bzz-raw://0805fa7d55def167c0f0804573f4376ed37afd6a2b2e3727eb17982c49f01f99",
+				"dweb:/ipfs/QmWmU4NVfCrUwxme2c7AiS7xaBKG72QgKJYH26VrTrQQmD"
 			]
 		},
 		"contracts/MedicalRecord.sol": {
-			"keccak256": "0x23949fbb83d0afd83ec9087ab902317d3d67db49b8a64808aabb0308326f363c",
+			"keccak256": "0xbede41e28d280ec3017475219032e1b3c93de75b2211fc9c6e8ebfe9185582b3",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://23850f617a54bbb88cacad3376c5a1a5baee86b812eda1f962c26b444759d290",
-				"dweb:/ipfs/QmSscqs13hPzEM2KZDeKJvJD7B4pGLHUBG614k2jBWzXqj"
+				"bzz-raw://ac87e19f6e12ba96d4670874c8862e7f2c1f0ef1009d6416894546ae0dfa27f9",
+				"dweb:/ipfs/QmaXfBEb3k4J8d9bvga5c73TXcDqhzfLqSBF18zyyqFrvK"
 			]
 		},
 		"contracts/PatientRegistry.sol": {
-			"keccak256": "0xee96f1326c2a2cdd8b99ceefce56f3e02d53deeed4ae57381f9e997390cf0535",
+			"keccak256": "0xe8d10f9c7a1f9d65e915ef49fc9c2984f30863a965c1d8661c01899aad0562d4",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://372a380ea40647a914f54d96824aab3814478a2722ae522e854e0f1ce8a306dd",
-				"dweb:/ipfs/QmQKj2hkK4ZVCoWAK7nGfksdWF1LXZu4dyaaW2sfGPnxhw"
+				"bzz-raw://07c7a07589ee56bd4315c814198652efcbefe25bcec18c3796ef67150fc1286d",
+				"dweb:/ipfs/QmPWxk1LDyZFkUMUD7FmbPbCEsRjbd3KLfLLAmhBbsefAs"
 			]
 		}
 	},

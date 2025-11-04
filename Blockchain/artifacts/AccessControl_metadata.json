@@ -49,6 +49,44 @@
 						"internalType": "string",
 						"name": "_fileHash",
 						"type": "string"
+					}
+				],
+				"name": "getDoctorsForFile",
+				"outputs": [
+					{
+						"internalType": "address[]",
+						"name": "activeDoctors",
+						"type": "address[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_doctor",
+						"type": "address"
+					}
+				],
+				"name": "getFilesForDoctor",
+				"outputs": [
+					{
+						"internalType": "string[]",
+						"name": "activeFileHashes",
+						"type": "string[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_fileHash",
+						"type": "string"
 					},
 					{
 						"internalType": "address",
@@ -106,37 +144,12 @@
 		],
 		"devdoc": {
 			"kind": "dev",
-			"methods": {
-				"grantAccess(string,address)": {
-					"params": {
-						"_doctor": "- Address of doctor to be granted access",
-						"_fileHash": "- IPFS hash of the file (string)"
-					}
-				},
-				"hasAccess(string,address)": {
-					"params": {
-						"_fileHash": "- IPFS hash (string)",
-						"_user": "- Address to check"
-					},
-					"returns": {
-						"_0": "bool - True if user has access"
-					}
-				},
-				"revokeAccess(string,address)": {
-					"params": {
-						"_doctor": "- Address of doctor whose access will be revoked",
-						"_fileHash": "- IPFS hash (string)"
-					}
-				}
-			},
+			"methods": {},
 			"version": 1
 		},
 		"userdoc": {
 			"kind": "user",
 			"methods": {
-				"grantAccess(string,address)": {
-					"notice": "Grant access to a doctor for a specific file"
-				},
 				"hasAccess(string,address)": {
 					"notice": "Check if a user has access to a specific file"
 				},
@@ -164,11 +177,11 @@
 	},
 	"sources": {
 		"contracts/AccessControl.sol": {
-			"keccak256": "0x323287aca64c7f305a27a3a9dbc222eb0dce1031d154670b06119dc820a4364e",
+			"keccak256": "0xcd846a6ad68855a022fa38b9fef4fbead71529c29c3be38cc9bfcca16ec8ade1",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://4cfbfb866b698e7ffe51e3a0653ba2a4b848ef029335f45d8ed08b1442700625",
-				"dweb:/ipfs/QmRPQxzLWu2oHoLTTtsWvrwA6hqYnM5LvcyngV93bgqHg1"
+				"bzz-raw://0805fa7d55def167c0f0804573f4376ed37afd6a2b2e3727eb17982c49f01f99",
+				"dweb:/ipfs/QmWmU4NVfCrUwxme2c7AiS7xaBKG72QgKJYH26VrTrQQmD"
 			]
 		}
 	},

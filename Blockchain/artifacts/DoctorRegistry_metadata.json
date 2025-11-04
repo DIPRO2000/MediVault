@@ -66,6 +66,11 @@
 				"name": "doctors",
 				"outputs": [
 					{
+						"internalType": "address",
+						"name": "walletAddress",
+						"type": "address"
+					},
+					{
 						"internalType": "string",
 						"name": "ipfsHash",
 						"type": "string"
@@ -79,6 +84,19 @@
 						"internalType": "bool",
 						"name": "registered",
 						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getAllRegisteredDoctors",
+				"outputs": [
+					{
+						"internalType": "address[]",
+						"name": "",
+						"type": "address[]"
 					}
 				],
 				"stateMutability": "view",
@@ -138,6 +156,25 @@
 			{
 				"inputs": [
 					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "registeredDoctorAddresses",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "address",
 						"name": "_doctor",
 						"type": "address"
@@ -177,11 +214,11 @@
 	},
 	"sources": {
 		"contracts/DoctorRegistry.sol": {
-			"keccak256": "0x74dba3dc69345104f09b0c510107743ba1ed14f4eb9ac6738eea5b590b9d88c7",
+			"keccak256": "0xdb71a63b376f50ebaa6fd0da9ac529d876694ad0d1b362b3139a3569cfc9c81c",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://84a446e7261496305f8e4c5049a9dbac766b2bf1ded1d1df055741afcdc730d1",
-				"dweb:/ipfs/QmVh3yoPohaPfyqx1tqDcdbiFCSEQvzRWSwhmbvadgTGbe"
+				"bzz-raw://5d046721a9598562b527d20e0b3cd5420570308ab96c7a0baf7ad842880f1a07",
+				"dweb:/ipfs/QmRJiSUMZW2mpxTQpCrrA7toJCL2JNLNqaDTEvsnA3qyNM"
 			]
 		}
 	},

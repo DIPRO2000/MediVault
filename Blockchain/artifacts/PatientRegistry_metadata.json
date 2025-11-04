@@ -62,6 +62,19 @@
 				"type": "function"
 			},
 			{
+				"inputs": [],
+				"name": "getAllRegisteredPatients",
+				"outputs": [
+					{
+						"internalType": "address[]",
+						"name": "",
+						"type": "address[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "address",
@@ -119,6 +132,32 @@
 						"internalType": "string[]",
 						"name": "",
 						"type": "string[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getTotalPatientsCount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getTotalRecordsCount",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
@@ -210,6 +249,51 @@
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "registeredPatientAddresses",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "totalFileRecords",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "totalPatients",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
 			}
 		],
 		"devdoc": {
@@ -240,11 +324,11 @@
 	},
 	"sources": {
 		"contracts/PatientRegistry.sol": {
-			"keccak256": "0xee96f1326c2a2cdd8b99ceefce56f3e02d53deeed4ae57381f9e997390cf0535",
+			"keccak256": "0xe8d10f9c7a1f9d65e915ef49fc9c2984f30863a965c1d8661c01899aad0562d4",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://372a380ea40647a914f54d96824aab3814478a2722ae522e854e0f1ce8a306dd",
-				"dweb:/ipfs/QmQKj2hkK4ZVCoWAK7nGfksdWF1LXZu4dyaaW2sfGPnxhw"
+				"bzz-raw://07c7a07589ee56bd4315c814198652efcbefe25bcec18c3796ef67150fc1286d",
+				"dweb:/ipfs/QmPWxk1LDyZFkUMUD7FmbPbCEsRjbd3KLfLLAmhBbsefAs"
 			]
 		}
 	},

@@ -57,12 +57,12 @@ contract MedicalRecord {
      * @notice View record details if access is granted or caller is owner
      * @param _fileHash - IPFS file hash (string)
      */
-    function viewRecord(string memory _fileHash) external view returns (Record memory) {
+    function viewRecord(string memory _fileHash,address _user) external view returns (Record memory) {
         Record memory record = records[_fileHash];
         require(record.owner != address(0), "Record does not exist");
 
-        bool isOwner = record.owner == msg.sender;
-        bool hasPermission = accessControl.hasAccess(_fileHash, msg.sender);
+        bool isOwner = record.owner == _user;
+        bool hasPermission = accessControl.hasAccess(_fileHash, _user);
 
         require(isOwner || hasPermission, "Access denied");
 

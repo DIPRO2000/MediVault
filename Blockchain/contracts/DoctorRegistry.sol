@@ -5,12 +5,16 @@ contract DoctorRegistry {
     address public admin;
 
     struct Doctor {
-        string ipfsHash;   // IPFS CID containing doctor's details (name, degree, license, etc.)
-        bool verified;     // Indicates if admin has verified the doctor
-        bool registered;   // Indicates if doctor has registered
+        address walletAddress; // <-- NEW: Added doctor's wallet address to the struct
+        string ipfsHash;      // IPFS CID containing doctor's details (name, degree, license, etc.)
+        bool verified;        // Indicates if admin has verified the doctor
+        bool registered;      // Indicates if doctor has registered
     }
 
     mapping(address => Doctor) public doctors;
+    
+    // <-- NEW: Array to store all registered doctor addresses for iteration
+    address[] public registeredDoctorAddresses; 
 
     event DoctorRegistered(address indexed doctor, string ipfsHash);
     event DoctorVerified(address indexed doctor);
@@ -30,10 +34,14 @@ contract DoctorRegistry {
         require(bytes(_ipfsHash).length > 0, "Invalid IPFS hash");
 
         doctors[msg.sender] = Doctor({
+            walletAddress: msg.sender, // <-- NEW: Storing the address
             ipfsHash: _ipfsHash,
             verified: false,
             registered: true
         });
+
+        // <-- NEW: Add the new doctor's address to the array
+        registeredDoctorAddresses.push(msg.sender); 
 
         emit DoctorRegistered(msg.sender, _ipfsHash);
     }
@@ -56,5 +64,10 @@ contract DoctorRegistry {
     function getDoctorDetails(address _doctor) external view returns (string memory) {
         require(doctors[_doctor].registered, "Doctor not registered");
         return doctors[_doctor].ipfsHash;
+    }
+    
+    // Function to return the array of all registered doctor addresses
+    function getAllRegisteredDoctors() external view returns (address[] memory) {
+        return registeredDoctorAddresses;
     }
 }
