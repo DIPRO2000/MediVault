@@ -18,11 +18,7 @@ export default function PatientDashboard() {
   const [uploading, setUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const [recordType, setRecordType] = useState("");
-  const [uploadedFiles, setUploadedFiles] = useState([
-    { id: 1, name: "Blood Test Report - Jan 2025", ipfsHash: "QmX47fKj...", date: "2025-01-15", status: "verified" },
-    { id: 2, name: "MRI Scan Results", ipfsHash: "QmY83hLp...", date: "2025-01-10", status: "verified" },
-    { id: 3, name: "Prescription - Dr. Smith", ipfsHash: "QmZ92kQw...", date: "2025-01-05", status: "pending" }
-  ]);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
 
   const [doctorAddress, setDoctorAddress] = useState("");
   
@@ -72,10 +68,10 @@ export default function PatientDashboard() {
       try {
         //setLoading(true);
         const response = await axios.get(
-          `http://localhost:3000/api/ipfs/getpatientfiles/${userAddress}`
+          `${import.meta.env.VITE_BACKEND_URL}/api/ipfs/getpatientfiles/${userAddress}`
         );
-        setUploadedFiles(response.data.files || []);
-        console.log("Fetched patient files:", response.data.files);
+        setUploadedFiles(response.data.fileRecords || []);
+        //console.log("Fetched patient files:", response.data.fileRecords);
       } catch (err) {
         console.error("Error fetching patient files:", err);
         //setError("Failed to load patient files.");
@@ -88,7 +84,7 @@ export default function PatientDashboard() {
     if (userAddress) {
       fetchPatientFiles();
     }
-  }, [userAddress]);
+  }, [userAddress,activeTab]);
 
   const patientInfo = {
     name: patientDetails ? patientDetails.name : "Loading...",
@@ -131,124 +127,143 @@ export default function PatientDashboard() {
   };
 
   const handleFileUpload = async (file) => {
-  try {
-    if (!recordType.trim()) {
-      alert("Please enter the record type (e.g., X-Ray, Prescription).");
-      return;
-    }
-
-    if (!file) {
-      alert("Please select a file to upload.");
-      return;
-    }
-
-    setUploading(true);
-    const formData = new FormData();
-    formData.append("file", file);
-
-    // Upload to IPFS first
-    const response = await fetch("http://localhost:3000/api/ipfs/patientfileupload", {
-      method: "POST",
-      body: formData,
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`IPFS upload failed: ${errorText}`);
-    }
-
-    const data = await response.json();
-    const ipfsHash = data.hash;
-
-    if (!ipfsHash) {
-      throw new Error("No IPFS hash returned from server");
-    }
-
-    console.log("IPFS Hash received:", ipfsHash);
-
-    // Convert IPFS hash string to bytes32
-    //const ipfsHashBytes32 = ethers.encodeBytes32String(ipfsHash);
-    //console.log("Converted to bytes32:", ipfsHashBytes32);
-
-    // Push to blockchain
     try {
+      if (!recordType.trim()) {
+        alert("Please enter the record type (e.g., X-Ray, Prescription).");
+        return;
+      }
+
+      if (!file) {
+        alert("Please select a file to upload.");
+        return;
+      }
+
+      setUploading(true);
+      const formData = new FormData();
+      formData.append("file", file);
+
+      // Upload to IPFS first
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/ipfs/patientfileupload`, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`IPFS upload failed: ${errorText}`);
+      }
+
+      const data = await response.json();
+      const ipfsHash = data.hash;
+
+      if (!ipfsHash) {
+        throw new Error("No IPFS hash returned from server");
+      }
+
+      console.log("IPFS Hash received:", ipfsHash);
+
+      // Check if patient is registered first
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
-      
-      const contract = new ethers.Contract(
-        CONTRACTS.medicalrecord.address,
-        CONTRACTS.medicalrecord.abi,
+      const userAddress = await signer.getAddress();
+
+      const patientContract = new ethers.Contract(
+        CONTRACTS.patient.address,
+        CONTRACTS.patient.abi,
         signer
       );
 
-      // Estimate gas first
-      const gasEstimate = await contract.uploadRecord.estimateGas(
-        ipfsHash, 
-        recordType
-      );
-      console.log("Gas estimate:", gasEstimate.toString());
-
-      // Send the transaction
-      const tx = await contract.uploadRecord(
-        ipfsHash, 
-        recordType, 
-        {
-          gasLimit: gasEstimate.mul(110).div(100) // Add 10% buffer
-        }
-      );
-      
-      console.log("Transaction sent:", tx.hash);
-      
-      // Wait for confirmation
-      const receipt = await tx.wait();
-      console.log("Transaction confirmed:", receipt);
-
-      // Add to uploaded files list
-      const newFile = {
-        id: uploadedFiles.length + 1,
-        name: `${recordType} - ${file.name}`,
-        ipfsHash: `${ipfsHash.substring(0, 12)}...`,
-        fullHash: ipfsHash,
-        date: new Date().toISOString().split("T")[0],
-        status: "verified",
-        fileName: file.name,
-        txHash: tx.hash
-      };
-
-      setUploadedFiles([newFile, ...uploadedFiles]);
-      alert(`File "${file.name}" uploaded successfully!\nTransaction: ${tx.hash}`);
-      
-    } catch (blockchainError) {
-      console.error("Blockchain error:", blockchainError);
-      
-      if (blockchainError.code === 'INVALID_ARGUMENT') {
-        throw new Error("Invalid parameters sent to contract. Please check your inputs.");
-      } else if (blockchainError.code === 'CALL_EXCEPTION') {
-        throw new Error("Contract call failed. Make sure you're connected to the right network and have the correct contract address.");
-      } else if (blockchainError.code === 'INSUFFICIENT_FUNDS') {
-        throw new Error("Insufficient funds for gas. Please add ETH to your wallet.");
-      } else if (blockchainError.message?.includes('user rejected')) {
-        throw new Error("Transaction was rejected by user.");
-      } else {
-        throw new Error(`Blockchain transaction failed: ${blockchainError.message}`);
+      const patientInfo = await patientContract.patients(userAddress);
+      if (!patientInfo.isRegistered) {
+        throw new Error("You need to register as a patient first before uploading files.");
       }
+
+      // Push to blockchain
+      try {
+        const medicalRecordContract = new ethers.Contract(
+          CONTRACTS.medicalrecord.address,
+          CONTRACTS.medicalrecord.abi,
+          signer
+        );
+
+        let gasLimit;
+        try {
+          // Try to estimate gas
+          gasLimit = await medicalRecordContract.uploadRecord.estimateGas(ipfsHash, recordType);
+          console.log("Gas estimate:", gasLimit.toString());
+        } catch (estimationError) {
+          console.warn("Gas estimation failed, using default:", estimationError);
+          gasLimit = 300000; // Use safe default
+        }
+
+        // Send the transaction
+        const tx = await medicalRecordContract.uploadRecord(
+          ipfsHash, 
+          recordType, 
+          {
+            gasLimit: gasLimit
+          }
+        );
+        
+        console.log("Transaction sent:", tx.hash);
+        
+        // Wait for confirmation
+        const receipt = await tx.wait();
+        console.log("Transaction confirmed:", receipt);
+
+        // Get the current timestamp for the new file
+        const currentTimestamp = Math.floor(Date.now() / 1000); // Unix timestamp
+
+        // Add to uploaded files list - FIXED: include uploadTime
+        const newFile = {
+          id: uploadedFiles.length + 1,
+          name: `${recordType} - ${file.name}`,
+          ipfsHash: `${ipfsHash.substring(0, 12)}...`,
+          fullHash: ipfsHash,
+          date: new Date().toISOString().split("T")[0],
+          uploadTime: currentTimestamp.toString(), // Add this for backend
+          status: "verified",
+          fileName: file.name,
+          txHash: tx.hash
+        };
+
+        setUploadedFiles([newFile, ...uploadedFiles]);
+        
+        alert(`✅ File "${file.name}" uploaded successfully!\nTransaction: ${tx.hash}`);
+        
+      } catch (blockchainError) {
+        console.error("Blockchain error details:", blockchainError);
+        
+        if (blockchainError.code === 'INVALID_ARGUMENT') {
+          throw new Error("Invalid parameters sent to contract. Please check your inputs.");
+        } else if (blockchainError.code === 'CALL_EXCEPTION') {
+          throw new Error("Contract call failed. Make sure you're connected to the right network and have the correct contract address.");
+        } else if (blockchainError.code === 'INSUFFICIENT_FUNDS') {
+          throw new Error("Insufficient funds for gas. Please add ETH to your wallet.");
+        } else if (blockchainError.message?.includes('user rejected')) {
+          throw new Error("Transaction was rejected by user.");
+        } else if (blockchainError.message?.includes('Patient not registered')) {
+          throw new Error("You need to register as a patient first.");
+        } else {
+          throw new Error(`Blockchain transaction failed: ${blockchainError.message}`);
+        }
+      }
+
+      // Reset form
+      setRecordType("");
+      setSelectedFile(null);
+      
+      // Clear file inputs
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      if (cameraInputRef.current) cameraInputRef.current.value = '';
+
+    } catch (err) {
+      console.error("Upload error:", err);
+      alert(`❌ Upload failed: ${err.message}`);
+    } finally {
+      setUploading(false);
     }
-
-    // Reset form
-    setRecordType("");
-    setSelectedFile(null);
-    
-    // Clear file inputs
-    if (fileInputRef.current) fileInputRef.current.value = '';
-    if (cameraInputRef.current) cameraInputRef.current.value = '';
-
-  } catch (err) {
-    console.error("Upload error:", err);
-    alert(`Upload failed: ${err.message}`);
-  } finally {
-    setUploading(false);
-  }
-};
+  };
 
   const removeSelectedFile = () => {
     setSelectedFile(null);
@@ -587,18 +602,19 @@ export default function PatientDashboard() {
                                 <FileText className="w-6 h-6 text-blue-600" />
                               </div>
                               <div>
-                                <h4 className="font-semibold text-gray-900">{file.name}</h4>
+                                <h4 className="font-semibold text-gray-900">{file.fileType}</h4>
                                 <p className="text-sm text-gray-500 flex items-center gap-2">
                                   <Calendar className="w-4 h-4" />
-                                  {file.date}
+                                  {new Date(Number(file.uploadTime) * 1000).toLocaleString()}
+                                  {/* {file.uploadTime} */}
                                 </p>
                                 <p className="text-xs text-gray-400 font-mono mt-1">
-                                  IPFS: {file.ipfsHash}
+                                  IPFS HASH: {file.fileHash}
                                 </p>
                               </div>
                             </div>
                             <div className="flex items-center gap-3">
-                              {file.status === "verified" ? (
+                              {/* {file.status === "verified" ? (
                                 <span className="flex items-center gap-1 text-sm text-green-600 bg-green-50 px-3 py-1 rounded-full">
                                   <CheckCircle2 className="w-4 h-4" />
                                   Verified
@@ -608,7 +624,7 @@ export default function PatientDashboard() {
                                   <Clock className="w-4 h-4" />
                                   Pending
                                 </span>
-                              )}
+                              )} */}
                               <Button 
                                 variant="outline" 
                                 size="sm"

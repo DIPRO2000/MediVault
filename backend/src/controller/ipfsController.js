@@ -30,8 +30,8 @@ export const uploadToIPFS = async (req, res) => {
 
 
 export const getPatientFiles = async (req, res) => {
-
-  const contract = new ethers.Contract(CONTRACTS.patient.address, CONTRACTS.patient.abi, provider);
+  const patientContract = new ethers.Contract(CONTRACTS.patient.address, CONTRACTS.patient.abi, provider);
+  const medicalrecordContract = new ethers.Contract(CONTRACTS.medicalrecord.address, CONTRACTS.medicalrecord.abi, provider);
 
   try {
     const { address } = req.params;
@@ -39,21 +39,37 @@ export const getPatientFiles = async (req, res) => {
       return res.status(400).json({ error: "Invalid wallet address" });
     }
 
-    const fileHashes = await contract.getPatientFiles(address);
+    const fileHashes = await patientContract.getPatientFiles(address);
 
     // Optional: convert bytes32 to string if stored that way
     const formattedHashes = fileHashes.map((hash) => {
       try {
         return ethers.decodeBytes32String(hash).replace(/\0/g, "");
       } catch {
-        return hash; // fallback if it’s already a normal string
+        return hash; // fallback if it's already a normal string
       }
     });
+
+    let fileRecords = [];
+    for (const hash of formattedHashes) {
+      const record = await medicalrecordContract.getRecordDetails(hash);
+      
+      // Convert BigInt values to strings for JSON serialization
+      const serializableRecord = {
+        fileHash: record.fileHash,
+        fileType: record.fileType,
+        owner: record.owner,
+        uploadTime: record.uploadTime.toString(), // Convert BigInt to string
+      };
+      
+      fileRecords.push(serializableRecord);
+    }
 
     return res.status(200).json({
       success: true,
       patient: address,
-      files: formattedHashes,
+      fileHashes: formattedHashes,
+      fileRecords: fileRecords,
       count: formattedHashes.length,
     });
   } catch (error) {

@@ -262,7 +262,7 @@
 		"compilationTarget": {
 			"contracts/MedicalRecord.sol": "MedicalRecord"
 		},
-		"evmVersion": "paris",
+		"evmVersion": "prague",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
@@ -291,11 +291,11 @@
 			]
 		},
 		"contracts/PatientRegistry.sol": {
-			"keccak256": "0x3e7accd22a1f8d9cb69aa32d2a73dc67bfd2c0c761918f6f3c68e22f41066e25",
+			"keccak256": "0xee96f1326c2a2cdd8b99ceefce56f3e02d53deeed4ae57381f9e997390cf0535",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://0b5414346758925ec087c323357cd74b3141c7572c60a9c9aafc0e6ccccb1d8f",
-				"dweb:/ipfs/QmeavjFJ559anmTkw7iUzdsWJ975nWQqAGMYnS7ffgfyq9"
+				"bzz-raw://372a380ea40647a914f54d96824aab3814478a2722ae522e854e0f1ce8a306dd",
+				"dweb:/ipfs/QmQKj2hkK4ZVCoWAK7nGfksdWF1LXZu4dyaaW2sfGPnxhw"
 			]
 		}
 	},

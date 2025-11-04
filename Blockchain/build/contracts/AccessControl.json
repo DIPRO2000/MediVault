@@ -97,7 +97,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     }
   ],
   "metadata": "{\"compiler\":{\"version\":\"0.8.30+commit.73712a01\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"string\",\"name\":\"fileHash\",\"type\":\"string\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"doctor\",\"type\":\"address\"}],\"name\":\"AccessGranted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"string\",\"name\":\"fileHash\",\"type\":\"string\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"doctor\",\"type\":\"address\"}],\"name\":\"AccessRevoked\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_fileHash\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"_doctor\",\"type\":\"address\"}],\"name\":\"grantAccess\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_fileHash\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"_user\",\"type\":\"address\"}],\"name\":\"hasAccess\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_fileHash\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"_doctor\",\"type\":\"address\"}],\"name\":\"revokeAccess\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{\"grantAccess(string,address)\":{\"params\":{\"_doctor\":\"- Address of doctor to be granted access\",\"_fileHash\":\"- IPFS hash of the file (string)\"}},\"hasAccess(string,address)\":{\"params\":{\"_fileHash\":\"- IPFS hash (string)\",\"_user\":\"- Address to check\"},\"returns\":{\"_0\":\"bool - True if user has access\"}},\"revokeAccess(string,address)\":{\"params\":{\"_doctor\":\"- Address of doctor whose access will be revoked\",\"_fileHash\":\"- IPFS hash (string)\"}}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"grantAccess(string,address)\":{\"notice\":\"Grant access to a doctor for a specific file\"},\"hasAccess(string,address)\":{\"notice\":\"Check if a user has access to a specific file\"},\"revokeAccess(string,address)\":{\"notice\":\"Revoke access for a doctor to a specific file\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/AccessControl.sol\":\"AccessControl\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/AccessControl.sol\":{\"keccak256\":\"0x323287aca64c7f305a27a3a9dbc222eb0dce1031d154670b06119dc820a4364e\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://4cfbfb866b698e7ffe51e3a0653ba2a4b848ef029335f45d8ed08b1442700625\",\"dweb:/ipfs/QmRPQxzLWu2oHoLTTtsWvrwA6hqYnM5LvcyngV93bgqHg1\"]}},\"version\":1}",
@@ -6060,12 +6061,13 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x6791679031690954DA80D001B662740a2e51e297",
-      "transactionHash": "0x024e26bd4c838a92633f6b275058ae98f7073378cf74c170a9c3bfa636ccad0d"
+      "address": "0xd021C8Ae5747F1FF540cc1B813D0000B8379aAa8",
+      "transactionHash": "0x0f86e468aab1803bc92062afef26919e8e14ea0080e6d3a39b849975cca9c476"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2025-11-03T19:35:11.620Z",
+  "updatedAt": "2025-11-04T04:43:16.991Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {

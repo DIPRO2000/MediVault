@@ -86,7 +86,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -161,7 +162,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -205,7 +207,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     }
   ],
   "metadata": "{\"compiler\":{\"version\":\"0.8.30+commit.73712a01\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"patient\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"fileHash\",\"type\":\"string\"}],\"name\":\"FileAdded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"patient\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"}],\"name\":\"PatientRegistered\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_patient\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"_fileHash\",\"type\":\"string\"}],\"name\":\"addFileToPatient\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_patient\",\"type\":\"address\"}],\"name\":\"getPatientDetails\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"gender\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"dateOfBirth\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"bloodGroup\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"contactInfo\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"homeAddress\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_patient\",\"type\":\"address\"}],\"name\":\"getPatientFiles\",\"outputs\":[{\"internalType\":\"string[]\",\"name\":\"\",\"type\":\"string[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"patients\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"gender\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"dateOfBirth\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"bloodGroup\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"contactInfo\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"homeAddress\",\"type\":\"string\"},{\"internalType\":\"bool\",\"name\":\"isRegistered\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"_gender\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"_dateOfBirth\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"_bloodGroup\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"_contactInfo\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"_homeAddress\",\"type\":\"string\"}],\"name\":\"registerPatient\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/PatientRegistry.sol\":\"PatientRegistry\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/PatientRegistry.sol\":{\"keccak256\":\"0xee96f1326c2a2cdd8b99ceefce56f3e02d53deeed4ae57381f9e997390cf0535\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://372a380ea40647a914f54d96824aab3814478a2722ae522e854e0f1ce8a306dd\",\"dweb:/ipfs/QmQKj2hkK4ZVCoWAK7nGfksdWF1LXZu4dyaaW2sfGPnxhw\"]}},\"version\":1}",
@@ -14522,12 +14525,13 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0xAe4af7459308d6B67FdeAB1e17598905d34bCF41",
-      "transactionHash": "0x1af2d7ed9623b1b482d4cd65cf6af70cc623e43ce271bcbddbebc45d4499d85f"
+      "address": "0x0865f542bA308593892fff2769D3466aF1a81d48",
+      "transactionHash": "0xb9b452266256801af889a9b100dc9682fbd8ad98c642ceba78b4df357d634ac9"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2025-11-03T19:35:11.641Z",
+  "updatedAt": "2025-11-04T04:43:17.152Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {},
