@@ -13388,12 +13388,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x1bcfCd4D0274d80fb5c6be2751eC62Dc457be872",
-      "transactionHash": "0xa72a08b94f76ebe9a431043224ebc769dca7f5bd9b308fc6615a4a1859bad5be"
+      "address": "0xd504239f7B158E14dd15EA72652b8019c73c8681",
+      "transactionHash": "0x83833737e76fdecdae4b4e028f4ee4e2eb9210e2b0e007b52a913c30849b819b"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2025-11-04T15:48:03.672Z",
+  "updatedAt": "2025-11-05T10:39:38.259Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

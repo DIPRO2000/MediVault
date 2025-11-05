@@ -459,6 +459,8 @@ export default function PatientDashboard() {
         signer
       );
 
+      //console.log("Filehash to revoke:", fileHash);
+
       const tx = await AccessControlContract.revokeAccess(fileHash, doctorAddress);
       await tx.wait();
 

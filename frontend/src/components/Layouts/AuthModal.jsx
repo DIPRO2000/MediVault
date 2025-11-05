@@ -260,13 +260,13 @@ export default function AuthModal({
               </p>
             ) : (
               <>
-                <InputField
+                {/* <InputField
                   label="Admin Password"
                   id="adminPassword"
                   type="password"
                   placeholder="Enter admin password"
                   onChange={(v) => setFormData({ ...formData, password: v })}
-                />
+                /> */}
                 <FormButtons 
                   onCancel={() => setActiveForm(null)} 
                   color="purple" 

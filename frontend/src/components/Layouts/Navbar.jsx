@@ -11,9 +11,9 @@ export default function Navbar({ onAuthOpen }) {
   const navigationItems = [
     { title: "Home", url: "/" },
     { title: "About", url: "/about" },
-    { title: "Patient Dashboard", url: "/patientdashboard" },
-    { title: "Doctor Dashboard", url: "/doctordashboard" },
-    { title: "Admin", url: "/admin" },
+    // { title: "Patient Dashboard", url: "/patientdashboard" },
+    // { title: "Doctor Dashboard", url: "/doctordashboard" },
+    // { title: "Admin", url: "/admin" },
     { title: "Contact", url: "/contact" },
   ];
 

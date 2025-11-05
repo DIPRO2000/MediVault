@@ -2,6 +2,7 @@ import axios from "axios";
 import {ethers} from "ethers";
 import { provider,CONTRACTS,RPC_URL } from "../config/contracts.js";
 
+// Store Doctor Metadata to IPFS via Pinata
 export const uploadDoctorMetadataToIPFS = async (req, res) => {
   try {
     const { name, specialization, degree, licenseNumber, experience, contactInfo } = req.body;
@@ -56,6 +57,7 @@ export const uploadDoctorMetadataToIPFS = async (req, res) => {
 };
 
 
+// Get Doctor Metadata from IPFS using Doctor's Blockchain Address
 export const getDoctorMetadataFromIPFS = async (req, res) => {
   try {
     const { docAddress } = req.params;
@@ -266,7 +268,7 @@ export const getDoctorAccessibleFiles = async (req, res) => {
                     fileHash: fileHash,
                     recordType: record.recordType,
                     owner: record.owner,
-                    timestamp: record.timestamp.toString(),
+                    timestamp: record.uploadTime.toString(),
                     isOwner: record.owner === doctorAddress,
                     accessGrantedBy: record.owner // The patient who granted access
                 };
@@ -400,9 +402,9 @@ export const getDoctorAccessibleFilesWithPatientInfo = async (req, res) => {
 
                 return {
                     fileHash: fileHash,
-                    recordType: record.recordType,
-                    timestamp: record.timestamp.toString(),
-                    uploadDate: new Date(Number(record.timestamp) * 1000).toISOString(),
+                    recordType: record.fileType,
+                    timestamp: record.uploadTime.toString(),
+                    uploadDate: new Date(Number(record.uploadTime) * 1000).toISOString(),
                     patient: patientInfo,
                     accessGrantedBy: record.owner,
                     isOwner: record.owner === doctorAddress

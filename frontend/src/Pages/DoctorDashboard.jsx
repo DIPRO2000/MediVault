@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Stethoscope, CheckCircle2, Clock, FileText, User, Shield, Loader2, AlertCircle } from "lucide-react";
+import { Stethoscope, CheckCircle2, Clock, FileText, User, Shield, Loader2, AlertCircle, Calendar } from "lucide-react";
 import { CONTRACTS } from "@/config/contracts.js";
 
 export default function DoctorDashboard() {
@@ -21,7 +21,11 @@ export default function DoctorDashboard() {
   });
 
   const [patientRecords, setPatientRecords] = useState([]);
+  const [loadingRecords, setLoadingRecords] = useState(false);
   const [error, setError] = useState(null);
+
+  // Pinata Gateway URL
+  const PINATA_GATEWAY_URL = "https://gateway.pinata.cloud/ipfs/";
 
   // Verify doctor and fetch data
   useEffect(() => {
@@ -62,6 +66,11 @@ export default function DoctorDashboard() {
         const ipfsHash = doctorData.ipfsHash;
         await fetchDoctorDataFromAPI(userAddress, ipfsHash);
 
+        // If verified, fetch accessible patient records
+        if (doctorData.verified) {
+          await fetchAccessiblePatientRecords(userAddress);
+        }
+
       } catch (err) {
         console.error("Doctor verification failed:", err);
         setError("Could not verify your doctor registration. Please reconnect your wallet.");
@@ -95,9 +104,6 @@ export default function DoctorDashboard() {
       }
 
       console.log("Doctor data fetched successfully from API:", data);
-      
-      // Format wallet address for display
-      //const formattedAddress = `${doctorAddress.substring(0, 6)}...${doctorAddress.substring(38)}`;
       
       // Update doctor info with data from API
       setDoctorInfo({
@@ -134,27 +140,59 @@ export default function DoctorDashboard() {
     }
   };
 
-  // Sample patient records (replace with actual data from your contracts)
-  const samplePatientRecords = [
-    {
-      id: 1,
-      patientName: "John Doe",
-      patientAddress: "0x8f3b21Aa...3c7dEf",
-      recordName: "Blood Test Report",
-      ipfsHash: "QmX47fKj...",
-      date: "2025-01-15",
-      type: "Lab Report"
-    },
-    {
-      id: 2,
-      patientName: "Jane Smith",
-      patientAddress: "0x9a2c45Bb...4d8eGh",
-      recordName: "MRI Scan Results",
-      ipfsHash: "QmY83hLp...",
-      date: "2025-01-12",
-      type: "Imaging"
+  // Fetch accessible patient records
+  const fetchAccessiblePatientRecords = async (doctorAddress) => {
+    if (!doctorAddress) return;
+    
+    setLoadingRecords(true);
+    try {
+      console.log('Fetching accessible patient records for doctor:', doctorAddress);
+      
+      const response = await fetch(`http://localhost:3000/api/doctor/accessible-files-with-patient-info/${doctorAddress}`);
+      const data = await response.json();
+      
+      if (data.success) {
+        console.log('Accessible files fetched successfully:', data);
+        setPatientRecords(data.accessibleFiles || []);
+      } else {
+        console.error('Failed to fetch accessible files:', data.error);
+        setPatientRecords([]);
+      }
+    } catch (error) {
+      console.error('Error fetching accessible patient records:', error);
+      setPatientRecords([]);
+    } finally {
+      setLoadingRecords(false);
     }
-  ];
+  };
+
+  // Handle viewing a patient record
+  const handleViewRecord = (record) => {
+    if (!record.fileHash) {
+      console.error("Error: Cannot view record. File hash is missing.");
+      return;
+    }
+
+    const ipfsUrl = `${PINATA_GATEWAY_URL}${record.fileHash}`;
+    window.open(ipfsUrl, '_blank');
+    console.log(`Successfully opened record: ${record.recordType} (Hash: ${record.fileHash}) in a new tab.`);
+  };
+
+  // Format date for display
+  const formatDate = (timestamp) => {
+    try {
+      const date = new Date(Number(timestamp) * 1000);
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    } catch (error) {
+      return "Unknown date";
+    }
+  };
 
   // Show loading spinner while verifying
   if (loading) {
@@ -307,6 +345,7 @@ export default function DoctorDashboard() {
                   </TabsTrigger>
                 </TabsList>
 
+                
                 <TabsContent value="profile">
                   <Card className="border-none shadow-lg">
                     <CardHeader>
@@ -316,11 +355,13 @@ export default function DoctorDashboard() {
                       <div className="grid md:grid-cols-2 gap-6 mb-6">
                         <div className="p-6 bg-gradient-to-br from-green-50 to-green-100 rounded-xl border border-green-200">
                           <p className="text-sm text-green-700 mb-2">Total Patients</p>
-                          <p className="text-3xl font-bold text-green-900">24</p>
+                          <p className="text-3xl font-bold text-green-900">
+                            {[...new Set(patientRecords.map(record => record.patient?.walletAddress))].length}
+                          </p>
                         </div>
                         <div className="p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl border border-blue-200">
                           <p className="text-sm text-blue-700 mb-2">Records Accessed</p>
-                          <p className="text-3xl font-bold text-blue-900">156</p>
+                          <p className="text-3xl font-bold text-blue-900">{patientRecords.length}</p>
                         </div>
                       </div>
 
@@ -422,59 +463,127 @@ export default function DoctorDashboard() {
                 <TabsContent value="records">
                   <Card className="border-none shadow-lg">
                     <CardHeader>
-                      <CardTitle>Patient Records (Accessed)</CardTitle>
+                      <div className="flex items-center justify-between">
+                        <CardTitle>Patient Records</CardTitle>
+                        <div className="flex items-center gap-2">
+                          {loadingRecords && (
+                            <Loader2 className="w-4 h-4 animate-spin text-green-600" />
+                          )}
+                          <Badge variant="outline" className="bg-blue-50 text-blue-700">
+                            {patientRecords.length} Records
+                          </Badge>
+                        </div>
+                      </div>
                     </CardHeader>
                     <CardContent>
-                      <div className="space-y-4">
-                        {samplePatientRecords.map((record) => (
-                          <div
-                            key={record.id}
-                            className="p-5 bg-white border border-gray-200 rounded-xl hover:shadow-md transition-shadow"
-                          >
-                            <div className="flex items-start justify-between mb-3">
-                              <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                                  <FileText className="w-6 h-6 text-blue-600" />
+                      {loadingRecords ? (
+                        <div className="text-center py-12">
+                          <Loader2 className="w-8 h-8 text-green-600 animate-spin mx-auto mb-4" />
+                          <p className="text-gray-600">Loading patient records...</p>
+                        </div>
+                      ) : patientRecords.length > 0 ? (
+                        <div className="space-y-4">
+                          {patientRecords.map((record, index) => (
+                            <div
+                              key={index}
+                              className="p-5 bg-white border border-gray-200 rounded-xl hover:shadow-md transition-shadow"
+                            >
+                              <div className="flex items-start justify-between mb-3">
+                                <div className="flex items-center gap-3">
+                                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                                    <FileText className="w-6 h-6 text-blue-600" />
+                                  </div>
+                                  <div>
+                                    <h4 className="font-semibold text-gray-900">{record.recordType}</h4>
+                                    <p className="text-sm text-gray-600">
+                                      Patient: {record.patient?.name || "Unknown Patient"}
+                                    </p>
+                                  </div>
+                                </div>
+                                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                                  {record.recordType}
+                                </Badge>
+                              </div>
+                              
+                              {/* Patient Information */}
+                              <div className="grid md:grid-cols-2 gap-4 mb-3">
+                                <div className="space-y-2">
+                                  <div>
+                                    <p className="text-xs text-gray-500">Patient Name</p>
+                                    <p className="font-medium text-gray-900">{record.patient?.name || "Unknown"}</p>
+                                  </div>
+                                  <div>
+                                    <p className="text-xs text-gray-500">Blood Group</p>
+                                    <p className="font-medium text-gray-900">{record.patient?.bloodGroup || "Not specified"}</p>
+                                  </div>
+                                </div>
+                                <div className="space-y-2">
+                                  <div>
+                                    <p className="text-xs text-gray-500">Contact</p>
+                                    <p className="font-medium text-gray-900">{record.patient?.contactInfo || "Not specified"}</p>
+                                  </div>
+                                  <div>
+                                    <p className="text-xs text-gray-500">Patient Wallet Address</p>
+                                    <p className="font-mono text-xs text-gray-900">
+                                      {record.patient?.walletAddress ? 
+                                        `${record.patient.walletAddress.substring(0, 8)}...${record.patient.walletAddress.substring(36)}` 
+                                        : "Unknown"
+                                      }
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Record Information */}
+                              <div className="grid md:grid-cols-2 gap-4 mb-4">
+                                <div>
+                                  <p className="text-xs text-gray-500">Upload Date</p>
+                                  <p className="text-sm font-medium text-gray-900 flex items-center gap-1">
+                                    <Calendar className="w-3 h-3" />
+                                    {formatDate(record.timestamp)}
+                                  </p>
                                 </div>
                                 <div>
-                                  <h4 className="font-semibold text-gray-900">{record.recordName}</h4>
-                                  <p className="text-sm text-gray-600">Patient: {record.patientName}</p>
+                                  <p className="text-xs text-gray-500">Access Granted By</p>
+                                  <p className="text-sm font-medium text-gray-900">
+                                    {record.accessGrantedBy === record.patient?.walletAddress ? 
+                                      "Patient" : "Unknown"
+                                    }
+                                  </p>
                                 </div>
                               </div>
-                              <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-                                {record.type}
-                              </Badge>
-                            </div>
-                            <div className="grid md:grid-cols-2 gap-3 text-sm mb-3">
-                              <div>
-                                <p className="text-gray-500">Date</p>
-                                <p className="font-medium text-gray-900">{record.date}</p>
-                              </div>
-                              <div>
-                                <p className="text-gray-500">Patient Address</p>
-                                <p className="font-mono text-xs text-gray-900">{record.patientAddress}</p>
-                              </div>
-                            </div>
-                            <div className="mb-4">
-                              <p className="text-xs text-gray-500 mb-1">IPFS Hash</p>
-                              <p className="font-mono text-xs bg-gray-100 p-2 rounded text-gray-700">
-                                {record.ipfsHash}
-                              </p>
-                            </div>
-                            <Button variant="outline" className="w-full">
-                              View Record
-                            </Button>
-                          </div>
-                        ))}
-                      </div>
 
-                      {samplePatientRecords.length === 0 && (
+                              <div className="mb-4">
+                                <p className="text-xs text-gray-500 mb-1">IPFS Hash</p>
+                                <p className="font-mono text-xs bg-gray-100 p-2 rounded text-gray-700 break-all">
+                                  {record.fileHash}
+                                </p>
+                              </div>
+                              
+                              <Button 
+                                variant="outline" 
+                                className="w-full"
+                                onClick={() => handleViewRecord(record)}
+                              >
+                                View Record
+                              </Button>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
                         <div className="text-center py-12">
                           <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                           <p className="text-gray-500">No patient records available yet</p>
                           <p className="text-sm text-gray-400 mt-2">
                             Patients will share their records with you once you're verified
                           </p>
+                          <Button 
+                            variant="outline" 
+                            className="mt-4"
+                            onClick={() => fetchAccessiblePatientRecords(doctorInfo.walletAddress)}
+                          >
+                            Refresh Records
+                          </Button>
                         </div>
                       )}
                     </CardContent>

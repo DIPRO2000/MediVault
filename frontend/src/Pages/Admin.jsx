@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { ethers } from "ethers";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -8,9 +10,14 @@ import { ShieldCheck, UserCheck, Activity, FileText, Users, CheckCircle2, Clock,
 import { CONTRACTS } from "@/config/contracts";
 
 export default function Admin() {
+  const navigate = useNavigate();
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [adminAddress, setAdminAddress] = useState("");
+  const [userAddress, setUserAddress] = useState("");
+  const [updatingDoctor, setUpdatingDoctor] = useState(null);
   const [stats, setStats] = useState({
     totalDoctors: 0,
     verifiedDoctors: 0,
@@ -18,9 +25,56 @@ export default function Admin() {
     totalRecords: 0
   });
 
+  // Check if connected wallet is admin
+  useEffect(() => {
+    const checkAdmin = async () => {
+      try {
+        if (!window.ethereum) {
+          alert("Please install MetaMask!");
+          navigate("/");
+          return;
+        }
+
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
+        const userAddress = await signer.getAddress();
+        setUserAddress(userAddress);
+
+        const doctorContract = new ethers.Contract(
+          CONTRACTS.doctor.address,
+          CONTRACTS.doctor.abi,
+          signer
+        );
+
+        // Get admin address from contract
+        const contractAdmin = await doctorContract.admin();
+        setAdminAddress(contractAdmin);
+
+        // Check if connected wallet is admin
+        if (userAddress.toLowerCase() !== contractAdmin.toLowerCase()) {
+          alert("Access denied! Only admin can access this dashboard.");
+          navigate("/");
+          return;
+        }
+
+        setIsAdmin(true);
+        console.log("Admin verified:", userAddress);
+
+      } catch (err) {
+        console.error("Admin verification failed:", err);
+        alert("Could not verify admin access. Please reconnect your wallet.");
+        navigate("/");
+      }
+    };
+
+    checkAdmin();
+  }, [navigate]);
+
   // Fetch all doctors data
   useEffect(() => {
     const fetchAllData = async () => {
+      if (!isAdmin) return;
+
       try {
         setLoading(true);
         setError(null);
@@ -65,7 +119,7 @@ export default function Admin() {
           licenseHash: doctor.ipfsHash ? `${doctor.ipfsHash.substring(0, 20)}...` : "Not available",
           walletAddress: `${doctor.address.substring(0, 6)}...${doctor.address.substring(38)}`,
           fullAddress: doctor.address,
-          verified: doctor.verified, // You'll need to get this from your contract
+          verified: doctor.verified,
           joinDate: new Date(doctor.metadata.timestamp).toLocaleDateString(),
           degree: doctor.metadata.degree,
           licenseNumber: doctor.metadata.licenseNumber,
@@ -94,47 +148,84 @@ export default function Admin() {
     };
 
     fetchAllData();
-  }, []);
+  }, [isAdmin]);
 
-  const handleVerificationToggle = async (doctorId) => {
+  const handleVerificationToggle = async (doctorId, newStatus) => {
     try {
+      setUpdatingDoctor(doctorId);
       const doctor = doctors.find(d => d.id === doctorId);
       if (!doctor) return;
 
-      const newStatus = !doctor.verified;
+      console.log(`Updating verification for doctor ${doctor.name} to: ${newStatus}`);
+
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+
+      const doctorContract = new ethers.Contract(
+        CONTRACTS.doctor.address,
+        CONTRACTS.doctor.abi,
+        signer
+      );
+
+      // Call the verifyDoctor function from your contract
+      const tx = await doctorContract.verifyDoctor(doctor.fullAddress);
       
-      // Here you would typically call your backend API to update verification status
-      // For now, we'll just update the local state
+      console.log("Verify doctor transaction sent:", tx.hash);
+      
+      // Wait for confirmation
+      const receipt = await tx.wait();
+      console.log("Transaction confirmed:", receipt);
+
+      // Update local state after successful blockchain update
       setDoctors(doctors.map(doc => {
         if (doc.id === doctorId) {
-          const updatedDoctor = { ...doc, verified: newStatus };
+          const updatedDoctor = { ...doc, verified: true };
           
           // Update stats
           setStats(prevStats => ({
             ...prevStats,
-            verifiedDoctors: newStatus 
-              ? prevStats.verifiedDoctors + 1 
-              : prevStats.verifiedDoctors - 1
+            verifiedDoctors: prevStats.verifiedDoctors + 1
           }));
 
-          alert(`Dr. ${doc.name} ${newStatus ? 'verified' : 'unverified'} successfully`);
           return updatedDoctor;
         }
         return doc;
       }));
 
-      // TODO: Call your backend API to update verification status on blockchain
-      // await fetch(`/api/doctor/verify/${doctor.fullAddress}`, {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ verified: newStatus })
-      // });
+      alert(`Dr. ${doctor.name} verified successfully!`);
 
     } catch (err) {
       console.error("Error updating verification status:", err);
-      alert("Failed to update verification status");
+      
+      if (err.code === 'ACTION_REJECTED') {
+        alert("Transaction was rejected by user");
+      } else if (err.message?.includes('Doctor not registered')) {
+        alert("Doctor is not registered in the system");
+      } else if (err.message?.includes('Already verified')) {
+        alert("Doctor is already verified");
+      } else if (err.message?.includes('Not admin')) {
+        alert("Only admin can verify doctors");
+      } else if (err.message?.includes('insufficient funds')) {
+        alert("Insufficient funds for gas");
+      } else {
+        alert(`Failed to verify doctor: ${err.message}`);
+      }
+    } finally {
+      setUpdatingDoctor(null);
     }
   };
+
+  // Show admin verification loading
+  if (!isAdmin && !error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-12 h-12 text-purple-600 animate-spin mx-auto mb-4" />
+          <p className="text-gray-600">Verifying admin access...</p>
+        </div>
+      </div>
+    );
+  }
 
   // Loading state
   if (loading) {
@@ -171,13 +262,23 @@ export default function Admin() {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
-              <ShieldCheck className="w-7 h-7 text-white" />
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center">
+                <ShieldCheck className="w-7 h-7 text-white" />
+              </div>
+              <div>
+                <h1 className="text-3xl md:text-4xl font-bold text-gray-900">Admin Dashboard</h1>
+                <p className="text-gray-600">System management and doctor verification</p>
+              </div>
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900">Admin Dashboard</h1>
+            <div className="text-right">
+              <p className="text-sm text-gray-500">Connected as Admin</p>
+              <p className="text-xs font-mono text-gray-600 bg-gray-100 px-2 py-1 rounded">
+                {userAddress.substring(0, 8)}...{userAddress.substring(36)}
+              </p>
+            </div>
           </div>
-          <p className="text-gray-600">System management and doctor verification</p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -298,8 +399,16 @@ export default function Admin() {
                             )}
                             <Switch
                               checked={doctor.verified}
-                              onCheckedChange={() => handleVerificationToggle(doctor.id)}
+                              onCheckedChange={(checked) => {
+                                if (checked && !doctor.verified) {
+                                  handleVerificationToggle(doctor.id, true);
+                                }
+                              }}
+                              disabled={doctor.verified || updatingDoctor === doctor.id}
                             />
+                            {updatingDoctor === doctor.id && (
+                              <Loader2 className="w-4 h-4 animate-spin text-purple-600" />
+                            )}
                           </div>
                         </div>
 
@@ -334,12 +443,17 @@ export default function Admin() {
                           </Button>
                           {!doctor.verified && (
                             <Button
-                              onClick={() => handleVerificationToggle(doctor.id)}
+                              onClick={() => handleVerificationToggle(doctor.id, true)}
+                              disabled={updatingDoctor === doctor.id}
                               size="sm"
                               className="flex-1 bg-green-600 hover:bg-green-700 text-white"
                             >
-                              <CheckCircle2 className="w-4 h-4 mr-1" />
-                              Verify Now
+                              {updatingDoctor === doctor.id ? (
+                                <Loader2 className="w-4 h-4 animate-spin mr-1" />
+                              ) : (
+                                <CheckCircle2 className="w-4 h-4 mr-1" />
+                              )}
+                              {updatingDoctor === doctor.id ? 'Verifying...' : 'Verify Now'}
                             </Button>
                           )}
                         </div>
@@ -412,6 +526,9 @@ export default function Admin() {
                           <p className="text-xs text-gray-600">Dr. {doctor.name} registered</p>
                           <p className="text-xs text-gray-400 mt-1">{doctor.joinDate}</p>
                         </div>
+                        {doctor.verified && (
+                          <CheckCircle2 className="w-4 h-4 text-green-600 mt-1" />
+                        )}
                       </div>
                     ))}
                     

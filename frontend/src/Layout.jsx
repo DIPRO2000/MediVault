@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { act, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom"; // Add useNavigate
+import { ethers } from "ethers";
 import Navbar from "./components/Layouts/Navbar";
 import Footer from "./components/Layouts/Footer";
 import AuthModal from "./components/Layouts/AuthModal";
 import { registerPatient } from "./utils/registerPatient";
 import { registerDoctor } from "./utils/registerDoctor";
+import { CONTRACTS } from "./config/contracts";
 
 export default function Layout() {
   const [authOpen, setAuthOpen] = useState(false);
@@ -49,6 +51,17 @@ export default function Layout() {
           } else {
             alert("Doctor not found or not registered.");
           }
+        }
+      } else if (activeForm === "admin") {
+        // Admin Login here
+
+        const isVerified = await verifyAdmin();
+        if (isVerified) {
+          navigate("/admin");
+        }
+        else {
+          alert("Admin authentication failed.");
+          navigate("/");
         }
       }
       
@@ -125,9 +138,30 @@ export const verifyDoctor = async () => {
     );
 
     const doctorInfo = await doctorContract.doctors(userAddress);
-    return doctorInfo.isRegistered;
+    return doctorInfo.registered;
   } catch (error) {
     console.error("Error verifying doctor:", error);
     return false;
   }
 };
+
+export const verifyAdmin = async () => {
+  try {
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    const signer = await provider.getSigner();
+    const userAddress = await signer.getAddress();
+    
+    const doctorContract = new ethers.Contract(
+      CONTRACTS.doctor.address,
+      CONTRACTS.doctor.abi,
+      signer
+    );
+
+    const contractAdmin = await doctorContract.admin();
+    return userAddress.toLocaleLowerCase() === contractAdmin.toLocaleLowerCase();
+
+  } catch (error) {
+    console.error("Error verifying admin:", error);
+    return false;
+  }
+}
