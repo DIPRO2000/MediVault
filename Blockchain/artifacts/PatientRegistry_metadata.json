@@ -311,7 +311,7 @@
 		"compilationTarget": {
 			"contracts/PatientRegistry.sol": "PatientRegistry"
 		},
-		"evmVersion": "paris",
+		"evmVersion": "prague",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"

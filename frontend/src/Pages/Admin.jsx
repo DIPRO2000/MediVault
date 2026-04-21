@@ -192,7 +192,7 @@ export default function Admin() {
         return doc;
       }));
 
-      alert(`Dr. ${doctor.name} verified successfully!`);
+      alert(`${doctor.name} verified successfully!`);
 
     } catch (err) {
       console.error("Error updating verification status:", err);

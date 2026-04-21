@@ -41,18 +41,18 @@ contract AccessControl {
         }
     }
 
-    /**
-     * @notice Revoke access for a doctor to a specific file
-     */
+    
+    // Revoke access for a doctor to a specific file
+    
     function revokeAccess(string memory _fileHash, address _doctor) external {
         require(bytes(_fileHash).length > 0, "Invalid file hash");
         require(_doctor != address(0), "Invalid doctor address");
 
-        // ✅ Only emit and revoke if the doctor currently has access
+        //  Only emit and revoke if the doctor currently has access
         if (fileAccess[_fileHash][_doctor]) {
             fileAccess[_fileHash][_doctor] = false;
 
-            // ✅ Remove from doctor’s active list efficiently
+            // Remove from doctor’s active list efficiently
             uint256 indexDoctor = doctorFileIndex[_doctor][_fileHash];
             string[] storage fileList = doctorToFileHashes[_doctor];
             if (indexDoctor < fileList.length) {
@@ -60,7 +60,7 @@ contract AccessControl {
                 fileList.pop();
             }
 
-            // ✅ Remove from file’s active doctor list efficiently
+            //  Remove from file’s active doctor list efficiently
             uint256 indexFile = fileDoctorIndex[_fileHash][_doctor];
             address[] storage doctorList = fileToDoctors[_fileHash];
             if (indexFile < doctorList.length) {
@@ -72,9 +72,9 @@ contract AccessControl {
         }
     }
 
-    /**
-     * @notice Check if a user has access to a specific file
-     */
+
+    // Check if a user has access to a specific file
+    
     function hasAccess(string memory _fileHash, address _user) public view returns (bool) {
         require(bytes(_fileHash).length > 0, "Invalid file hash");
         return fileAccess[_fileHash][_user];

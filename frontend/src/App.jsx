@@ -12,6 +12,7 @@ import Admin from './Pages/Admin'
 import DoctorDashboard from './Pages/DoctorDashboard'
 import PatientDashboard from './Pages/PatientDashboard'
 
+
 function App() {
   return (
     <Router>
