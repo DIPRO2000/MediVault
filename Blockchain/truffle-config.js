@@ -41,10 +41,11 @@
  * https://trufflesuite.com/docs/truffle/getting-started/using-the-truffle-dashboard/
  */
 
-// require('dotenv').config();
-// const { MNEMONIC, PROJECT_ID } = process.env;
+require('dotenv').config();
+const { MNEMONIC, INFURA_PROJECT_ID } = process.env;
 
-// const HDWalletProvider = require('@truffle/hdwallet-provider');
+const HDWalletProvider = require('@truffle/hdwallet-provider');
+console.log("DEBUG: ID is", process.env.INFURA_PROJECT_ID ? "FOUND" : "NOT FOUND");
 
 module.exports = {
   /**
@@ -72,6 +73,27 @@ module.exports = {
     timeoutBlocks: 500, // # Number of blocks before a deployment times out (minimum 50)
      disableConfirmationListener: true // Optional: can help with certain connection issues
     },
+
+    // Add Sepolia configuration
+    sepolia: {
+    provider: () => new HDWalletProvider({
+      mnemonic: {
+        phrase: MNEMONIC
+      },
+      providerOrUrl: `https://sepolia.infura.io/v3/${INFURA_PROJECT_ID}`,
+      // Higher interval prevents the "Polling" crash on slow connections
+      pollingInterval: 15000 
+    }),
+    network_id: 11155111,
+    gas: 4465030,
+    gasPrice: 20000000000, // 20 Gwei
+    networkCheckTimeout: 1000000,
+    // This prevents Truffle from starting the block listener that usually crashes
+    disableConfirmationListener: true, 
+    confirmations: 1, 
+    timeoutBlocks: 200,
+    skipDryRun: true
+  },
     //
     // An additional network, but with some advanced options…
     // advanced: {
