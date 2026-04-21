@@ -104,7 +104,7 @@ export default function PatientDashboard() {
       try {
         console.log('Fetching patient files access data for:', userAddress);
         
-        const response = await fetch(`http://localhost:3000/api/ipfs/files-access-stats/${userAddress}`);
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/ipfs/files-access-stats/${userAddress}`);
         const data = await response.json();
         
         if (data.success) {

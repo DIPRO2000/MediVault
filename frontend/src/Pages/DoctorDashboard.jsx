@@ -90,7 +90,7 @@ export default function DoctorDashboard() {
       console.log("Fetching doctor data from API for:", doctorAddress);
       
       const response = await fetch(
-        `http://localhost:3000/api/doctor/doctordetails/${doctorAddress}`
+        `${import.meta.env.VITE_BACKEND_URL}/api/doctor/doctordetails/${doctorAddress}`
       );
 
       if (!response.ok) {
@@ -148,7 +148,7 @@ export default function DoctorDashboard() {
     try {
       console.log('Fetching accessible patient records for doctor:', doctorAddress);
       
-      const response = await fetch(`http://localhost:3000/api/doctor/accessible-files-with-patient-info/${doctorAddress}`);
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/doctor/accessible-files-with-patient-info/${doctorAddress}`);
       const data = await response.json();
       
       if (data.success) {

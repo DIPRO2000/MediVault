@@ -1,8 +1,8 @@
 
-import PatientRegistry from "../../../Blockchain/build/contracts/PatientRegistry.json" with { type: "json" };
-import DoctorRegistry from "../../../Blockchain/build/contracts/DoctorRegistry.json" with { type: "json" };
-import AccessControl from "../../../Blockchain/build/contracts/AccessControl.json" with { type: "json" };
-import MedicalRecord from "../../../Blockchain/build/contracts/MedicalRecord.json" with { type: "json" };
+import PatientRegistry from "../blockchain/build/contracts/PatientRegistry.json" with { type: "json" };
+import DoctorRegistry from "../blockchain/build/contracts/DoctorRegistry.json" with { type: "json" };
+import AccessControl from "../blockchain/build/contracts/AccessControl.json" with { type: "json" };
+import MedicalRecord from "../blockchain/build/contracts/MedicalRecord.json" with { type: "json" };
 import { ethers } from "ethers";
 import dotenv from "dotenv";
 
