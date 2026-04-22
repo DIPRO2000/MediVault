@@ -1,6 +1,6 @@
 ## 🛡️ MedVault: Decentralized Healthcare Records
 
-**MedVault** is a next-generation **Electronic Healthcare Record (EHR) platform** designed to return data sovereignty to patients. By combining Ethereum Blockchain for access control and IPFS for decentralized storage, MedVault ensures that medical records are immutable, secure, and accessible only by authorized personnel.
+**MedVault** is a next-generation **Electronic Healthcare Record (EHR) platform** designed to return data sovereignty to patients. By combining **Ethereum Blockchain** for access control and **IPFS for decentralized storage**, MedVault ensures that medical records are **immutable, secure, and accessible** only by **authorized personnel**.
 
 
 
