@@ -155,17 +155,17 @@ RPC_URL=HTTP://127.0.0.1:7545 (for production use Infura RPC link)
 ## 🧪 Post-Deployment Sanity Test
 Once everything is live, follow this flow to ensure it's working:
 
-1. Open the site on a new browser tab.
+1. Open the site on a **new browser tab**.
 
-2. Click Connect Wallet — verify it prompts for Sepolia.
+2. Click **Connect Wallet** — verify it prompts for **Sepolia**.
 
-3. Upload a "test report" — verify the Pinata dashboard shows a new pinned file.
+3. Upload a **"test report"** — verify the **Pinata dashboard** shows a new pinned file.
 
-4. Check Etherscan — verify a new transaction appears under your contract address.
+4. Check **Etherscan** — verify a new transaction appears under your **contract address**.
 
 ---
 
 ## 🤝 Contributing
-Contributions are welcome! Please feel free to submit a Pull Request.
+**Contributions are welcome!** Please feel free to submit a Pull Request.
 
-Developed with ❤️ by Diprajit Chakraborty
+Developed with ❤️ by **Diprajit Chakraborty**
