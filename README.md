@@ -2,6 +2,12 @@
 
 **MedVault** is a next-generation **Electronic Healthcare Record (EHR) platform** designed to return data sovereignty to patients. By combining Ethereum Blockchain for access control and IPFS for decentralized storage, MedVault ensures that medical records are immutable, secure, and accessible only by authorized personnel.
 
+
+
+## 🌐 Live Demo
+**Frontend:** [https://medi-vault-sigma.vercel.app](https://medi-vault-sigma.vercel.app/)  
+**Backend:** [https://medivault-26gy.onrender.com](https://medivault-26gy.onrender.com)
+
 ---
 
 ## 🚀 Key Features
@@ -100,11 +106,11 @@ VITE_MEDICAL_RECORD_ADDRESS=contract address
 
 VITE_BACKEND_URL=http://localhost:3000 (for local development)
 
-#For Ganache / Localhost
+# For Ganache / Localhost
 VITE_REACT_APP_CHAIN_ID="0x539" # 1337 in hexadecimal
 VITE_REACT_APP_CHAIN_NAME="Ganache / Localhost"
 
-#For Sepolia Testnet
+# For Sepolia Testnet
 VITE_REACT_APP_CHAIN_ID="0xaa36a7" # 11155111 in hexadecimal
 VITE_REACT_APP_CHAIN_NAME="Sepolia Testnet"
 ```
@@ -129,11 +135,6 @@ MEDICAL_RECORD_ADDRESS=contract address
 
 RPC_URL=HTTP://127.0.0.1:7545 (for production use Infura RPC link)
 ```
-
----
-
-## 📜 License
-This project is licensed under the MIT License - see the LICENSE file for details.
 
 ---
 
