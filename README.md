@@ -138,6 +138,33 @@ RPC_URL=HTTP://127.0.0.1:7545 (for production use Infura RPC link)
 
 ---
 
+## 🔒 Deployment Tips
+
+* **Network Mapping**: Ensure your Vercel .env uses the Sepolia Chain ID (0xaa36a7). If it’s still on the Ganache ID, the app will connect but the contract calls will fail.
+
+* **The "Cold Start" Wakeup**: Render’s free tier sleeps after 15 mins. The first request might hang for 30s. Don't panic; just let the server "wake up."
+
+* **CORS Whitelist**: In your Render (Backend) settings, specifically allow your Vercel URL. Using * is a security risk for a medical app.
+
+* **Sensitive Toggles**: On Vercel, always mark your INFURA_ID and MNEMONIC as "Sensitive" to encrypt them in their database.
+
+* **Contract Address Update**: After running truffle migrate --network sepolia, you must update the contract addresses in both your Render and Vercel environment variables.
+
+---
+
+## 🧪 Post-Deployment Sanity Test
+Once everything is live, follow this flow to ensure it's working:
+
+1. Open the site on a new browser tab.
+
+2. Click Connect Wallet — verify it prompts for Sepolia.
+
+3. Upload a "test report" — verify the Pinata dashboard shows a new pinned file.
+
+4. Check Etherscan — verify a new transaction appears under your contract address.
+
+---
+
 ## 🤝 Contributing
 Contributions are welcome! Please feel free to submit a Pull Request.
 
